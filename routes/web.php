@@ -5,23 +5,18 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::inertia('/register', 'Auth/Register');
+Route::inertia('/login', 'Auth/Login');
+Route::inertia('/confirm-password', 'Auth/ConfirmPassword');
+Route::inertia('/reset-password', 'Auth/ResetPassword');
+Route::inertia('/forgot-password', 'Auth/ForgotPassword');
+Route::inertia('/verify-email', 'Auth/VerifyEmail');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::inertia('/', 'Welcome')
+        ->name('welcome');
+    Route::inertia('/profile', 'Profile/Edit')
+        ->name('profile');
 });
 
 require __DIR__.'/auth.php';
