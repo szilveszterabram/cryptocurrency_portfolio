@@ -32,8 +32,7 @@ class CoinMarketController extends Controller
 
             Log::info('Stored ' . count($chunks) * 50 . ' assets in cache');
 
-            return response()->setStatusCode(200);
-
+            return response()->json([], 200);
         } catch (ConnectionException|\Exception $e) {
             Log::error('An error occurred while fetching ' . $url . ' || See: ' . $e->getMessage());
         }
@@ -51,6 +50,10 @@ class CoinMarketController extends Controller
 
             $total_pages = Cache::get('assets:total-pages');
 
+            if (count($cache_assets) === 0 || count($total_pages) === 0) {
+                throw new \Exception('There are no assets in cache to fetch');
+            }
+
             return response()->json([
                 'assets' => $assets,
                 'total_pages' => $total_pages,
@@ -58,6 +61,32 @@ class CoinMarketController extends Controller
             ]);
         } catch (ConnectionException|\Exception $e) {
             Log::error('An error occurred while trying to retrieve assets from cache' . ' || See: ' . $e->getMessage());
+        }
+    }
+
+    public function assets_icons() {
+        $url =
+            config('services.api.base_url') .
+            config('services.api.assets') .
+            config('services.api.assets_icons') . '/25';
+        $headers = [
+            'Accept' => 'application/json',
+            'X-CoinAPI-key' => env('COIN_API_KEY'),
+        ];
+        try {
+            $response = Http::withHeaders($headers)->get($url);
+            $data = $response->json();
+
+            foreach ($data as $icon) {
+                Cache::set('assets:icon:' . $icon['asset_id'], $icon['url']);
+            }
+
+            Log::info('Stored ' . count($data) . ' asset icons in cache');
+
+            return response()->json([], 200);
+
+        } catch (ConnectionException|\Exception $e) {
+            Log::error('An error occurred while fetching ' . $url . ' || See: ' . $e->getMessage());
         }
     }
 }

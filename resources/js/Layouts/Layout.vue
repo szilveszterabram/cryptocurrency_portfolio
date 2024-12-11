@@ -11,6 +11,7 @@
                     class="flex w-full justify-evenly space-x-6 self-start text-xl"
                 >
                     <Link :href="route('welcome')">Home</Link>
+                    <Link :href="route('asset')">Assets</Link>
                     <Link :href="route('profile')">{{
                         $page.props.auth.user.name
                     }}</Link>

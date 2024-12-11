@@ -19,5 +19,10 @@ Route::middleware('auth')->group(function () {
         ->name('profile');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::inertia('/asset', 'Asset/Index')
+        ->name('asset');
+});
+
 require __DIR__.'/auth.php';
 require __DIR__.'/api.php';
