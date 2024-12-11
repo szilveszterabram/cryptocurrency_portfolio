@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'api' => [
+        'base_url' => env('COIN_API_BASE_URL', 'https://rest.coinapi.io/v1'),
+        'assets' => '/assets',
+    ]
 ];
