@@ -27,6 +27,9 @@
         "typescript": "^5.5.3",
         "vite": "^6.0",
         "vue": "^3.4.0",
-        "vue-tsc": "^2.0.24"
+        "vue-tsc": "^2.1.10"
+    },
+    "dependencies": {
+        "lucide-vue-next": "^0.468.0"
     }
 }

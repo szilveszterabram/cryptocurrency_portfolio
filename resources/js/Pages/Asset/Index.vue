@@ -40,6 +40,7 @@ const assetsWithIcons = computed(() => {
                     <td>Id</td>
                     <td>Name</td>
                     <td>Price USD</td>
+                    <td>Buy</td>
                 </tr>
                 <tr v-for="asset in assetsWithIcons" :key="asset.asset_id">
                     <td>
@@ -54,7 +55,15 @@ const assetsWithIcons = computed(() => {
                     </td>
                     <td>{{ asset.asset_id }}</td>
                     <td>{{ asset.name }}</td>
-                    <td>{{ asset.price_usd }}</td>
+                    <td>{{ asset.price_usd || 'No price data' }}</td>
+                    <td>
+                        <button
+                            class="rounded bg-gray-100 p-2 hover:bg-black hover:text-white"
+                            v-if="asset.price_usd != null"
+                        >
+                            Buy
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -103,7 +112,7 @@ const assetsWithIcons = computed(() => {
                 @click="
                     router.get(
                         route('assets.page', {
-                            key: parseInt(page!) + 1,
+                            key: parseInt(page! as unknown as string) + 1,
                         }),
                     )
                 "

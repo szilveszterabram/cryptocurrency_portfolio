@@ -20,7 +20,7 @@ const form = useForm({
 
 <template>
     <section>
-        <header>
+        <header class="bg-gray-50 p-2">
             <h2 class="text-lg font-medium text-gray-900">
                 Profile Information
             </h2>

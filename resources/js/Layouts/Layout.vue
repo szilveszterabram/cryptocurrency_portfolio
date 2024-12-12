@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-    <div class="flex h-full w-full flex-col">
+    <div class="flex h-full w-full bg-gray-50">
         <header class="fixed h-12 w-full bg-black text-white">
             <nav
                 class="mx-auto flex max-w-screen-lg items-center justify-between p-2"
@@ -12,6 +12,7 @@
                 >
                     <Link :href="route('welcome')">Home</Link>
                     <Link :href="route('assets.first')">Assets</Link>
+                    <Link :href="route('portfolio')">My Portfolios</Link>
                     <Link :href="route('profile')">{{
                         $page.props.auth.user.name
                     }}</Link>
@@ -28,7 +29,7 @@
                 </div>
             </nav>
         </header>
-        <main class="mb-5 mt-14 flex h-full w-full p-2">
+        <main class="mb-5 mt-14 h-full w-full bg-gray-50">
             <slot />
         </main>
     </div>
