@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -15,7 +16,7 @@ class CoinMarketController extends Controller
         $url = config('services.api.base_url') . config('services.api.assets');
         $headers = [
             'Accept' => 'application/json',
-            'X-CoinAPI-key' => env('COIN_API_KEY'),
+            'X-CoinAPI-key' => config('app.coin_api_key')
         ];
         try {
             $response = Http::withHeaders($headers)->get($url);
@@ -54,11 +55,11 @@ class CoinMarketController extends Controller
                 throw new \Exception('There are no assets in cache to fetch');
             }
 
-            return response()->json([
+            return [
                 'assets' => $assets,
                 'total_pages' => $total_pages,
                 'page' => $page_num,
-            ]);
+            ];
         } catch (ConnectionException|\Exception $e) {
             Log::error('An error occurred while trying to retrieve assets from cache' . ' || See: ' . $e->getMessage());
         }
@@ -71,7 +72,7 @@ class CoinMarketController extends Controller
             config('services.api.assets_icons') . '/25';
         $headers = [
             'Accept' => 'application/json',
-            'X-CoinAPI-key' => env('COIN_API_KEY'),
+            'X-CoinAPI-key' => config('app.coin_api_key')
         ];
         try {
             $response = Http::withHeaders($headers)->get($url);
@@ -82,11 +83,28 @@ class CoinMarketController extends Controller
             }
 
             Log::info('Stored ' . count($data) . ' asset icons in cache');
+            Cache::set('assets:icons:count', count($data));
 
             return response()->json([], 200);
 
         } catch (ConnectionException|\Exception $e) {
             Log::error('An error occurred while fetching ' . $url . ' || See: ' . $e->getMessage());
         }
+    }
+
+    public function assets_icons_id(Request $request) {
+        $icon_ids = $request->input('ids');
+
+        $result = [];
+        foreach ($icon_ids as $icon_id) {
+           $result[] = [
+               'asset_id' => $icon_id,
+               'url' => Cache::get('assets:icon:' . $icon_id),
+           ];
+        }
+
+        return [
+            'icons' => $result,
+        ];
     }
 }

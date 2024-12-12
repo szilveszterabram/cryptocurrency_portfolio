@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'coin_api_key' => env('COIN_API_KEY', null),
+    'app_url' => env('APP_URL', 'http://localhost'),
 ];

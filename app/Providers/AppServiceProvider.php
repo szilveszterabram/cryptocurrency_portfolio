@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\LoggedIn;
+use App\Listeners\FetchAssetData;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 

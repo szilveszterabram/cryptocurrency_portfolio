@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -20,8 +21,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::inertia('/asset', 'Asset/Index')
-        ->name('asset');
+    Route::get('/assets-first', [AssetController::class, 'first_page'])->name('assets.first');
 });
 
 require __DIR__.'/auth.php';
