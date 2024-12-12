@@ -13,6 +13,20 @@ class AssetController extends Controller
 {
     public function first_page(Request $request) {
         $page_num = 1;
+        return $this->extracted($page_num);
+    }
+
+    public function page(Request $request) {
+        $page_num = $request->key;
+        return $this->extracted($page_num);
+    }
+
+    /**
+     * @param mixed $page_num
+     * @return \Inertia\Response
+     */
+    public function extracted(mixed $page_num): \Inertia\Response
+    {
         $page_key = 'assets:page:' . $page_num;
 
         $cache_assets = Cache::get($page_key);
@@ -24,7 +38,6 @@ class AssetController extends Controller
         foreach ($assets as $asset) {
             $ids[] = $asset['asset_id'];
         }
-
         $result = [];
         foreach ($ids as $id) {
             $result[] = [
@@ -36,7 +49,7 @@ class AssetController extends Controller
         return Inertia::render('Asset/Index', [
             'assets' => $assets,
             'total_pages' => $total_pages,
-            'page_num' => $page_num,
+            'page' => $page_num,
             'icons' => $result,
         ]);
     }
