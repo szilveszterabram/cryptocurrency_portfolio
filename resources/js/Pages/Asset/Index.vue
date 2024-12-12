@@ -55,11 +55,20 @@ const assetsWithIcons = computed(() => {
                     </td>
                     <td>{{ asset.asset_id }}</td>
                     <td>{{ asset.name }}</td>
-                    <td>{{ asset.price_usd || 'No price data' }}</td>
+                    <td v-if="asset.price_usd">${{ asset.price_usd }}</td>
+                    <td v-else>No price data</td>
                     <td>
                         <button
                             class="rounded bg-gray-100 p-2 hover:bg-black hover:text-white"
                             v-if="asset.price_usd != null"
+                            @click="
+                                router.visit(route('entry.create'), {
+                                    method: 'get',
+                                    data: {
+                                        asset_id: asset.asset_id,
+                                    },
+                                })
+                            "
                         >
                             Buy
                         </button>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AssetController;
+use App\Http\Controllers\EntryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');
     Route::post('/portfolio/store', [PortfolioController::class, 'store'])->name('portfolio.store');
+    Route::delete('/portfolio/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy');
+
+    Route::get('/entry/create', [EntryController::class, 'create'])->name('entry.create');
 });
 
 require __DIR__.'/auth.php';

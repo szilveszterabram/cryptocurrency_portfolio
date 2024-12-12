@@ -30,6 +30,8 @@
         "vue-tsc": "^2.1.10"
     },
     "dependencies": {
-        "lucide-vue-next": "^0.468.0"
+        "@primevue/themes": "^4.2.5",
+        "lucide-vue-next": "^0.468.0",
+        "primevue": "^4.2.5"
     }
 }

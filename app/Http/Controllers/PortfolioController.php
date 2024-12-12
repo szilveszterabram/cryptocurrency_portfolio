@@ -34,4 +34,13 @@ class PortfolioController extends Controller
 
         return redirect(route('portfolio'));
     }
+
+    public function destroy($portfolio) {
+        $user = Auth::user();
+
+        $to_delete = $user->portfolios()->findOrFail($portfolio);
+        $to_delete->delete();
+
+        return redirect(route('portfolio'));
+    }
 }

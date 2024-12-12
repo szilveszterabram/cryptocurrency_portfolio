@@ -4,6 +4,7 @@ import './bootstrap';
 import Layout from '@/Layouts/Layout.vue';
 import { createInertiaApp, Head, Link } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import PrimeVue from 'primevue/config';
 import { createApp, DefineComponent, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
@@ -24,6 +25,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(PrimeVue)
             .use(ZiggyVue)
             .component('Head', Head)
             .component('Link', Link)
