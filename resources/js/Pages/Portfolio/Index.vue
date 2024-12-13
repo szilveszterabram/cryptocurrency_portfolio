@@ -36,6 +36,13 @@ const properties = defineProps({
                     <Eye
                         class="rounded bg-gray-100 p-2 hover:cursor-pointer hover:bg-gray-500 hover:text-white"
                         :size="38"
+                        @click="
+                            router.get(
+                                route('portfolio.show', {
+                                    portfolio: portfolio.id,
+                                }),
+                            )
+                        "
                     />
                 </td>
                 <td>

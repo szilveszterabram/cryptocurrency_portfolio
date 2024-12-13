@@ -11,7 +11,7 @@ const properties = defineProps<{
     asset: {
         asset_id: string;
         name: string;
-        price_usd: string;
+        price_usd: number;
     };
     icon_url?: string;
     portfolios: Array<{
@@ -33,14 +33,14 @@ const selectedPortfolioName = ref('Select a portfolio');
 watch(
     () => buy_form.buy_price,
     (newBuyPrice) => {
-        form.amount = newBuyPrice * parseFloat(properties.asset.price_usd);
+        form.amount = newBuyPrice / properties.asset.price_usd;
     },
 );
 
 watch(
     () => form.amount,
     (newAmount) => {
-        buy_form.buy_price = newAmount / parseFloat(properties.asset.price_usd);
+        buy_form.buy_price = newAmount * properties.asset.price_usd;
     },
 );
 
@@ -89,13 +89,13 @@ const buy = () => {
             </p>
 
             <TextInput
-                :name="asset.asset_id + ' amount'"
+                name="USD amount"
                 :model-value="buy_form.buy_price"
                 type="number"
                 :error-message="buy_form.errors.buy_price"
                 @update:model-value="(value) => (buy_form.buy_price = value)"
             /><TextInput
-                name="USD amount"
+                :name="asset.asset_id + ' amount'"
                 :model-value="form.amount"
                 type="number"
                 :error-message="form.errors.amount"

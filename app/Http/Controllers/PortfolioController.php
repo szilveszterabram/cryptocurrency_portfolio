@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Portfolio;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
@@ -41,6 +43,25 @@ class PortfolioController extends Controller
         }
 
         return redirect(route('portfolio'));
+    }
+
+    public function show(Portfolio $portfolio) {
+        $entries = $portfolio->entries()->orderBy('created_at', 'desc')->get();
+        $entry_ids = $portfolio->entries()->pluck('asset_short');
+
+        $icons = [];
+        foreach ($entry_ids as $entry_id) {
+            $icons[] = [
+                'id' => $entry_id,
+                'url' => Cache::get('assets:icon:' . $entry_id),
+            ];
+        }
+
+        return Inertia::render('Portfolio/Show', [
+            'portfolio' => $portfolio,
+            'entries' => $entries,
+            'icons' => $icons,
+        ]);
     }
 
     public function destroy($portfolio) {

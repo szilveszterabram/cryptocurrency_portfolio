@@ -25,9 +25,11 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/assets-first', [AssetController::class, 'first_page'])->name('assets.first');
     Route::get('/assets/{key}', [AssetController::class, 'page'])->name('assets.page');
+
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');
     Route::post('/portfolio/store', [PortfolioController::class, 'store'])->name('portfolio.store');
+    Route::get('/portfolio/{portfolio}', [PortfolioController::class, 'show'])->name('portfolio.show');
     Route::delete('/portfolio/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy');
 
     Route::get('/entry/create', [EntryController::class, 'create'])->name('entry.create');
