@@ -77,7 +77,7 @@ const assetsWithIcons = computed(() => {
             </tbody>
         </table>
 
-        <div class="pagination-bar flex items-center justify-center">
+        <div class="pagination-bar mb-4 flex items-center justify-center">
             <button
                 class="mx-2 rounded bg-black p-2 text-lg text-white disabled:bg-gray-100 disabled:text-gray-500"
                 :disabled="page == 1"

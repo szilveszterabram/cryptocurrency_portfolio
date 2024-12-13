@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class PortfolioController extends Controller
@@ -31,6 +32,13 @@ class PortfolioController extends Controller
         $res = $user->portfolios()->create([
             'name' => $validated['name'],
         ]);
+
+        if (session('redirect_to_entry_create')) {
+            session()->forget('redirect_to_entry_create');
+            $asset_id = Session::get('asset_id_to_create');
+
+            return redirect()->route('entry.create', ['asset_id' => $asset_id]);
+        }
 
         return redirect(route('portfolio'));
     }

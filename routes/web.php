@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/portfolio/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy');
 
     Route::get('/entry/create', [EntryController::class, 'create'])->name('entry.create');
+    Route::post('/entry/store', [EntryController::class, 'store'])->name('entry.store');
 });
 
 require __DIR__.'/auth.php';
