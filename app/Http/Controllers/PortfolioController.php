@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Portfolio;
 use App\Models\User;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
-class PortfolioController extends Controller
+class PortfolioController extends Controller implements ShouldQueue
 {
     public function index() {
         $user = Auth::user();
@@ -56,12 +58,41 @@ class PortfolioController extends Controller
                 'url' => Cache::get('assets:icon:' . $entry_id),
             ];
         }
+        $url = config('services.api.base_url') . config('services.api.assets') . config('services.api.') . '/';
+        foreach ($entries as $id) {
+            $url = $url . $id['asset_short'] . ',';
+        }
+        $headers = [
+            'Accept' => 'application/json',
+            'X-CoinAPI-key' => config('app.coin_api_key'),
+        ];
+        $response = Http::withHeaders($headers)->get($url);
+        $data = $response->json();
 
         return Inertia::render('Portfolio/Show', [
             'portfolio' => $portfolio,
             'entries' => $entries,
             'icons' => $icons,
+            'data' => $data,
         ]);
+    }
+
+    public function edit(Portfolio $portfolio) {
+        return Inertia::render('Portfolio/Edit', [
+            'portfolio' => $portfolio,
+        ]);
+    }
+
+    public function update(Request $request, Portfolio $portfolio) {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $portfolio->update([
+            'name' => $validated['name'],
+        ]);
+
+        return redirect('/portfolio');
     }
 
     public function destroy($portfolio) {

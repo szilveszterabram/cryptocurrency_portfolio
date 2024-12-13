@@ -11,6 +11,7 @@ class Entry extends Model
         'asset_short',
         'asset_long',
         'amount',
+        'price_at_buy',
     ];
 
     public function portfolio(): BelongsTo

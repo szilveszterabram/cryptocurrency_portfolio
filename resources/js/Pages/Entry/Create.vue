@@ -24,6 +24,7 @@ const form = useForm({
     portfolio_id: -1,
     asset_short: properties.asset.asset_id,
     asset_long: properties.asset.name,
+    price_at_buy: properties.asset.price_usd,
     amount: 0,
 });
 
@@ -94,12 +95,14 @@ const buy = () => {
                 type="number"
                 :error-message="buy_form.errors.buy_price"
                 @update:model-value="(value) => (buy_form.buy_price = value)"
+                :positive-only="true"
             /><TextInput
                 :name="asset.asset_id + ' amount'"
                 :model-value="form.amount"
                 type="number"
                 :error-message="form.errors.amount"
                 @update:model-value="(value) => (form.amount = value)"
+                :positive-only="true"
             />
 
             <button

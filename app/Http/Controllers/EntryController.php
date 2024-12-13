@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Portfolio;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
-class EntryController extends Controller
+class EntryController extends Controller implements ShouldQueue
 {
     public function create(Request $request) {
         $user = Auth::user();
@@ -49,7 +50,8 @@ class EntryController extends Controller
             'portfolio_id' => 'required',
             'asset_short' => 'required|string',
             'asset_long' => 'required|string',
-            'amount' => 'required|numeric',
+            'amount' => 'required|numeric|gt:0',
+            'price_at_buy' => 'required|numeric',
         ]);
 
         $portfolio = Portfolio::find($validated['portfolio_id']);
@@ -58,6 +60,7 @@ class EntryController extends Controller
             'asset_short' => $validated['asset_short'],
             'asset_long' => $validated['asset_long'],
             'amount' => $validated['amount'],
+            'price_at_buy' => $validated['price_at_buy'],
         ]);
 
         return redirect('portfolio');

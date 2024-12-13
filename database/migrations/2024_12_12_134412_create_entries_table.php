@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('asset_short')->nullable(false);
             $table->string('asset_long')->nullable(false);
             $table->float('amount')->nullable(false);
+            $table->float('price_at_buy')->nullable(false);
             $table->timestamps();
         });
     }

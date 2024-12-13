@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { router } from '@inertiajs/vue3';
+import { CircleDollarSign, HandCoins } from 'lucide-vue-next';
 import moment from 'moment';
 import { computed } from 'vue';
 
@@ -13,32 +15,48 @@ const properties = defineProps<{
         asset_short: string;
         asset_long: string;
         amount: number;
+        price_at_buy: number;
         created_at: string;
     }[];
     icons: {
         id: string;
         url: string;
     }[];
+    data: {
+        asset_id: string;
+        name: string;
+        price_usd: number;
+    }[];
 }>();
 
-const entriesWithIcons = computed(() =>
-    properties.entries.map((entry) => {
+const entriesWithIcons = computed(() => {
+    return properties.entries.map((entry) => {
         const icon = properties.icons.find(
             (icon) => icon.id === entry.asset_short,
         );
+        const assetData = properties.data.find(
+            (asset) => asset.asset_id === entry.asset_short,
+        );
+        const currentPrice = assetData ? assetData.price_usd : null;
+        const percentageChange = currentPrice
+            ? ((currentPrice - entry.price_at_buy) / entry.price_at_buy) * 100
+            : null;
+
         return {
             ...entry,
             iconUrl: icon ? icon.url : null,
+            currentPrice,
+            percentageChange,
         };
-    }),
-);
+    });
+});
 </script>
 
 <template>
     <Head :title="portfolio.name" />
 
     <div class="flex h-full w-full items-start justify-center">
-        <table class="mt-14" v-if="entries.length != 0">
+        <table class="mt-14 w-full" v-if="entries.length != 0">
             <thead>
                 {{
                     portfolio.name
@@ -51,7 +69,12 @@ const entriesWithIcons = computed(() =>
                     <td>Id</td>
                     <td>Name</td>
                     <td>Amount held</td>
+                    <td>Price at acquisition</td>
+                    <td>Current price</td>
+                    <td>Change</td>
                     <td>Date of acquisition</td>
+                    <td>Buy more</td>
+                    <td>Sell</td>
                 </tr>
                 <tr v-for="entry in entriesWithIcons" :key="entry.id">
                     <td>
@@ -66,12 +89,47 @@ const entriesWithIcons = computed(() =>
                     </td>
                     <td>{{ entry.asset_long }}</td>
                     <td>{{ entry.amount }}</td>
+                    <td>${{ entry.price_at_buy }}</td>
+                    <td>${{ entry.currentPrice }}</td>
+                    <td
+                        :class="
+                            entry.percentageChange! < 0
+                                ? 'text-red-500'
+                                : 'text-green-500'
+                        "
+                    >
+                        {{ entry.percentageChange!.toFixed(5) }}%
+                    </td>
                     <td>
                         {{
                             moment(entry.created_at).format(
                                 'MMMM DD, YYYY h:mm A',
                             )
                         }}
+                    </td>
+                    <td>
+                        <HandCoins
+                            class="rounded bg-black p-2 text-white hover:cursor-pointer hover:bg-gray-600"
+                            :size="50"
+                            @click="
+                                router.get(
+                                    route('entry.create', {
+                                        asset_id: entry.asset_short,
+                                    }),
+                                )
+                            "
+                        />
+                    </td>
+                    <td>
+                        <CircleDollarSign
+                            :class="
+                                (entry.percentageChange! < 0
+                                    ? 'bg-red-500 hover:bg-red-400'
+                                    : 'bg-green-500 hover:bg-green-400') +
+                                ' rounded p-2 text-white hover:cursor-pointer'
+                            "
+                            :size="50"
+                        />
                     </td>
                 </tr>
             </tbody>

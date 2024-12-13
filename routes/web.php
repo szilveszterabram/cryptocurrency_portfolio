@@ -30,7 +30,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');
     Route::post('/portfolio/store', [PortfolioController::class, 'store'])->name('portfolio.store');
     Route::get('/portfolio/{portfolio}', [PortfolioController::class, 'show'])->name('portfolio.show');
+    Route::get('/portfolio/{portfolio}/edit', [PortfolioController::class, 'edit'])->name('portfolio.edit');
     Route::delete('/portfolio/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy');
+    Route::patch('/portfolio/{portfolio}', [PortfolioController::class, 'update'])->name('portfolio.update');
 
     Route::get('/entry/create', [EntryController::class, 'create'])->name('entry.create');
     Route::post('/entry/store', [EntryController::class, 'store'])->name('entry.store');
