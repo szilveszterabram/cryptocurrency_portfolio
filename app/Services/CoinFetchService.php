@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Log;
 
 class CoinFetchService
 {
-    public function __construct()
-    {
-    }
-
     public function getHeaders(): array
     {
         return [
@@ -30,8 +26,8 @@ class CoinFetchService
     public function getRoute(CoinApiEndpoint $coinApiEndpoint): string
     {
         return match ($coinApiEndpoint) {
-            CoinApiEndpoint::ASSETS => config('services.api.assets'),
-            CoinApiEndpoint::ICONS => $this->getRoute(CoinApiEndpoint::ASSETS) . config('services.api.icons'),
+            CoinApiEndpoint::Assets => config('services.api.assets'),
+            CoinApiEndpoint::Icons => $this->getRoute(CoinApiEndpoint::Assets) . config('services.api.icons'),
         };
     }
 
@@ -63,13 +59,13 @@ class CoinFetchService
     public function fetchAssetById(string $assetId): array
     {
         // get the 0th index of the result array as it contains the single fetched asset
-        return $this->fetchData(CoinApiEndpoint::ASSETS, [], [$assetId])[0];
+        return $this->fetchData(CoinApiEndpoint::Assets, [], [$assetId])[0];
     }
 
     public function fetchAssetsById(Collection $icons): array
     {
         $assetIds = $icons->pluck('id');
 
-        return $this->fetchData(CoinApiEndpoint::ASSETS, [], [...$assetIds]);
+        return $this->fetchData(CoinApiEndpoint::Assets, [], [...$assetIds]);
     }
 }

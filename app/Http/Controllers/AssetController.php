@@ -9,11 +9,7 @@ use Inertia\Response;
 
 class AssetController extends Controller
 {
-    protected AssetService $assetService;
-    public function __construct(AssetService $assetService)
-    {
-        $this->assetService = $assetService;
-    }
+    public function __construct(protected AssetService $assetService) {}
 
     public function page(Request $request): Response
     {

@@ -13,20 +13,11 @@ use Inertia\Inertia;
 
 class PortfolioController extends Controller
 {
-    protected PortfolioService $portfolioService;
-    protected ValidationService $validationService;
-    protected CoinFetchService $coinFetchService;
-
     public function __construct(
-        PortfolioService $portfolioService,
-        ValidationService $validationService,
-        CoinfetchService $coinFetchService,
-    )
-    {
-        $this->portfolioService = $portfolioService;
-        $this->validationService = $validationService;
-        $this->coinFetchService = $coinFetchService;
-    }
+        protected PortfolioService $portfolioService,
+        protected ValidationService $validationService,
+        protected CoinfetchService $coinFetchService,
+    ) {}
 
     public function index() {
         $portfolios = $this->portfolioService->getUserPortfolios();

@@ -7,12 +7,7 @@ use App\Models\Portfolio;
 
 class EntryService
 {
-    protected Entry $entry;
-
-    public function __construct(Entry $entry)
-    {
-        $this->entry = $entry;
-    }
+    public function __construct(protected Entry $entry) {}
 
     public function create(Portfolio $portfolio, array $data): Entry
     {

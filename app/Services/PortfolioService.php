@@ -15,16 +15,10 @@ use Inertia\Response;
 
 class PortfolioService
 {
-    protected Portfolio $portfolio;
-    protected User $user;
-    protected CacheService $cacheService;
-
-    public function __construct(Portfolio $portfolio, User $user, CacheService $cacheService)
-    {
-        $this->user = $user;
-        $this->portfolio = $portfolio;
-        $this->cacheService = $cacheService;
-    }
+    public function __construct(
+        protected Portfolio $portfolio,
+        protected User $user,
+        protected CacheService $cacheService) {}
 
     public function hasEntryRedirectFlag(): bool
     {
@@ -87,7 +81,7 @@ class PortfolioService
     {
         $result = collect();
         foreach ($entryIds as $entryId) {
-            $key = $this->cacheService->getCacheKey(CacheKeys::ASSET_ICON, $entryId);
+            $key = $this->cacheService->getCacheKey(CacheKeys::AssetIcon, $entryId);
             $url = Cache::get($key);
             Log::debug($url);
             $result->push([

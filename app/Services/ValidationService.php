@@ -3,17 +3,11 @@
 namespace App\Services;
 
 use App\Models\Portfolio;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class ValidationService
 {
-    protected Portfolio $portfolio;
-
-    public function __construct(Portfolio $portfolio)
-    {
-        $this->portfolio = $portfolio;
-    }
+    public function __construct(protected Portfolio $portfolio) {}
 
     public function validateEntry(Request $request): array
     {

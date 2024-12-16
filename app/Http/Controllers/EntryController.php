@@ -13,26 +13,13 @@ use Inertia\Response;
 
 class EntryController extends Controller
 {
-    protected PortfolioService $portfolioService;
-    protected CacheService $cacheService;
-    protected CoinFetchService $coinFetchService;
-    protected ValidationService $validationService;
-    protected EntryService $entryService;
-
     public function __construct(
-        PortfolioService $portfolioService,
-        CacheService $cacheService,
-        CoinFetchService $coinFetchService,
-        ValidationService $validationService,
-        EntryService $entryService
-    )
-    {
-        $this->portfolioService = $portfolioService;
-        $this->cacheService = $cacheService;
-        $this->coinFetchService = $coinFetchService;
-        $this->validationService = $validationService;
-        $this->entryService = $entryService;
-    }
+        protected PortfolioService $portfolioService,
+        protected CacheService $cacheService,
+        protected CoinFetchService $coinFetchService,
+        protected ValidationService $validationService,
+        protected EntryService $entryService
+    ) {}
 
     public function create(Request $request): Response
     {
