@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Cache;
 
 class AssetService
 {
+    protected CacheService $cacheService;
+
+    public function __construct(CacheService $cacheService)
+    {
+        $this->cacheService = $cacheService;
+    }
+
     public function getIconUrlsForAssets(array $assets): array
     {
         $ids = [];
@@ -24,14 +31,9 @@ class AssetService
         return $result;
     }
 
-    public function getCacheKey(CacheKeys $key, string|null $value): string
-    {
-        return $key->value . $value;
-    }
-
     public function getAssetPage(int $pageNumber): array
     {
-        $key = $this->getCacheKey(CacheKeys::ASSET_PAGE, $pageNumber);
+        $key = $this->cacheService->getCacheKey(CacheKeys::ASSET_PAGE, $pageNumber);
         return json_decode(
             Cache::get($key), true
         );
@@ -39,7 +41,7 @@ class AssetService
 
     public function getAssetsTotalPages(): int
     {
-        $key = $this->getCacheKey(CacheKeys::ASSET_TOTAL_PAGES, null);
+        $key = $this->cacheService->getCacheKey(CacheKeys::ASSET_TOTAL_PAGES, null);
         return Cache::get($key);
     }
 

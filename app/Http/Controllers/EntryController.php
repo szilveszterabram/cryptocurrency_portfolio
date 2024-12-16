@@ -39,7 +39,7 @@ class EntryController extends Controller
         $assetId = $request->assetId;
 
         if (!$this->portfolioService->userHasPortfolios()) {
-            $this->portfolioService->redirectToCreate($assetId);
+            return $this->portfolioService->redirectToCreate($assetId);
         }
 
         $portfolios = $this->portfolioService->getUserPortfolios();

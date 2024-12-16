@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\CacheKeys;
 use Illuminate\Support\Facades\Cache;
 
 class CacheService
@@ -15,8 +16,17 @@ class CacheService
         return Cache::get('assets:icon:' . $assetId);
     }
 
-    public function getAssetPage(int $pageNumber): Array
+    public function getCacheKey(CacheKeys $key, string|null $value): string
     {
+        return $key->value . $value;
+    }
 
+    public function getRequestPage(Request $request): int
+    {
+        $pageNumber = $request->key;
+        if ($pageNumber === null) {
+            return 1;
+        }
+        return $pageNumber;
     }
 }
