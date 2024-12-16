@@ -14,4 +14,9 @@ class CacheService
     {
         return Cache::get('assets:icon:' . $assetId);
     }
+
+    public function getAssetPage(int $pageNumber): Array
+    {
+
+    }
 }

@@ -23,7 +23,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/assets-first', [AssetController::class, 'first_page'])->name('assets.first');
     Route::get('/assets/{key}', [AssetController::class, 'page'])->name('assets.page');
 
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');

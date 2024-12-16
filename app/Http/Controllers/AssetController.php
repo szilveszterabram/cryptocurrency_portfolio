@@ -2,55 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\AssetService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use App\Http\Controllers\CoinMarketController;
+use Inertia\Response;
 
 class AssetController extends Controller
 {
-    public function first_page(Request $request) {
-        $page_num = 1;
-        return $this->extracted($page_num);
-    }
-
-    public function page(Request $request) {
-        $page_num = $request->key;
-        return $this->extracted($page_num);
-    }
-
-    /**
-     * @param mixed $page_num
-     * @return \Inertia\Response
-     */
-    public function extracted(mixed $page_num): \Inertia\Response
+    protected AssetService $assetService;
+    public function __construct(AssetService $assetService)
     {
-        $page_key = 'assets:page:' . $page_num;
+        $this->assetService = $assetService;
+    }
 
-        $cache_assets = Cache::get($page_key);
-        $assets = json_decode($cache_assets, true);
-
-        $total_pages = Cache::get('assets:total-pages');
-
-        $ids = [];
-        foreach ($assets as $asset) {
-            $ids[] = $asset['asset_id'];
-        }
-        $result = [];
-        foreach ($ids as $id) {
-            $result[] = [
-                'asset_id' => $id,
-                'url' => Cache::get('assets:icon:' . $id),
-            ];
-        }
+    public function page(Request $request): Response
+    {
+        $pageNumber = $this->assetService->getRequestPage($request);
+        $assets = $this->assetService->getAssetPage($pageNumber);
+        $total_pages = $this->assetService->getAssetsTotalPages();
+        $icons = $this->assetService->getIconUrlsForAssets($assets);
 
         return Inertia::render('Asset/Index', [
             'assets' => $assets,
             'total_pages' => $total_pages,
-            'page' => $page_num,
-            'icons' => $result,
+            'page' => $pageNumber,
+            'icons' => $icons,
         ]);
     }
 }
