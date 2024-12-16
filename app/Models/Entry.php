@@ -14,6 +14,11 @@ class Entry extends Model
         'price_at_buy',
     ];
 
+    public function create(Portfolio $portfolio, array $data): Entry
+    {
+        return $portfolio->entries()->create($data);
+    }
+
     public function portfolio(): BelongsTo
     {
         return $this->belongsTo(Portfolio::class);

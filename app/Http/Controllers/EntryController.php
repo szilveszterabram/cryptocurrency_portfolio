@@ -2,66 +2,63 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Portfolio;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Services\CacheService;
+use App\Services\CoinFetchService;
+use App\Services\EntryService;
+use App\Services\PortfolioService;
+use App\Services\ValidationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
+use Inertia\Response;
 
-class EntryController extends Controller implements ShouldQueue
+class EntryController extends Controller
 {
-    public function create(Request $request) {
-        $user = Auth::user();
-        $portfolios = $user->portfolios()->get();
+    protected PortfolioService $portfolioService;
+    protected CacheService $cacheService;
+    protected CoinFetchService $coinFetchService;
+    protected ValidationService $validationService;
+    protected EntryService $entryService;
 
-        $asset_id = $request->asset_id;
-        if ($portfolios->isEmpty()) {
-            session(['redirect_to_entry_create' => true]);
-            Session::put('asset_id_to_create', $asset_id);
+    public function __construct(
+        PortfolioService $portfolioService,
+        CacheService $cacheService,
+        CoinFetchService $coinFetchService,
+        ValidationService $validationService,
+        EntryService $entryService
+    )
+    {
+        $this->portfolioService = $portfolioService;
+        $this->cacheService = $cacheService;
+        $this->coinFetchService = $coinFetchService;
+        $this->validationService = $validationService;
+        $this->entryService = $entryService;
+    }
 
-            return Inertia::render('Portfolio/Create');
+    public function create(Request $request): Response
+    {
+        $assetId = $request->assetId;
+
+        if (!$this->portfolioService->userHasPortfolios()) {
+            $this->portfolioService->redirectToCreate($assetId);
         }
 
-        $url = config('services.api.base_url') . config('services.api.assets') . '/' . $asset_id;
-        $headers = [
-            'Accept' => 'application/json',
-            'X-CoinAPI-key' => config('app.coin_api_key')
-        ];
-
-        $response = Http::withHeaders($headers)->get($url);
-        $data = $response->json();
-
-        $icon_url = Cache::get('assets:icon:' . $asset_id);
+        $portfolios = $this->portfolioService->getUserPortfolios();
+        $asset = $this->coinFetchService->fetchAssetById($assetId);
+        $iconUrl = $this->cacheService->getIconUrl($assetId);
 
 
         return Inertia::render('Entry/Create', [
-            'asset' => $data[0],
-            'icon_url' => $icon_url,
+            'asset' => $asset,
+            'icon_url' => $iconUrl,
             'portfolios' => $portfolios,
         ]);
     }
 
     public function store(Request $request) {
-        $user = Auth::user();
-        $validated = $request->validate([
-            'portfolio_id' => 'required',
-            'asset_short' => 'required|string',
-            'asset_long' => 'required|string',
-            'amount' => 'required|numeric|gt:0',
-            'price_at_buy' => 'required|numeric',
-        ]);
+        $validated = $this->validationService->validateEntry($request);
 
-        $portfolio = Portfolio::find($validated['portfolio_id']);
-        $portfolio->entries()->create([
-            'portfolio_id' => $validated['portfolio_id'],
-            'asset_short' => $validated['asset_short'],
-            'asset_long' => $validated['asset_long'],
-            'amount' => $validated['amount'],
-            'price_at_buy' => $validated['price_at_buy'],
-        ]);
+        $portfolio = $this->portfolioService->getById($validated['portfolio_id']);
+        $this->entryService->create($portfolio, $validated);
 
         return redirect('portfolio');
     }

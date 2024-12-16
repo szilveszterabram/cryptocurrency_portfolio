@@ -65,7 +65,7 @@ const assetsWithIcons = computed(() => {
                                 router.visit(route('entry.create'), {
                                     method: 'get',
                                     data: {
-                                        asset_id: asset.asset_id,
+                                        assetId: asset.asset_id,
                                     },
                                 })
                             "

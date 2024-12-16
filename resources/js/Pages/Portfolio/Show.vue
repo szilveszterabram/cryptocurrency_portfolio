@@ -114,7 +114,7 @@ const entriesWithIcons = computed(() => {
                             @click="
                                 router.get(
                                     route('entry.create', {
-                                        asset_id: entry.asset_short,
+                                        assetId: entry.asset_short,
                                     }),
                                 )
                             "
