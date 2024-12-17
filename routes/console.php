@@ -1,9 +1,10 @@
 <?php
 
+use App\Jobs\FetchAssetIconsJob;
+use App\Jobs\FetchAssetsJob;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
-use App\Events\AssetFetchSchedule;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -15,6 +16,5 @@ Artisan::command('logs:clear', function() {
     $this->comment('Logs have been cleared!');
 })->describe('Clear log files');
 
-Schedule::job(function () {
-    event(new AssetFetchSchedule());
-})->everyFiveMinutes();
+Schedule::job(FetchAssetsJob::class)->everyTenMinutes();
+Schedule::job(FetchAssetIconsJob::class)->everyTenMinutes();

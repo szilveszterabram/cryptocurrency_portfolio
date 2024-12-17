@@ -80,7 +80,7 @@ class CoinFetchService
                 ],
                 [
                     'asset_id' => $asset['asset_id'],
-                    'name' => $asset['name'],
+                    'name' => array_key_exists('name', $asset) ? $asset['name'] : "",
                     'price_usd' => array_key_exists('price_usd', $asset) ? $asset['price_usd'] : -1,
                     'type_is_crypto' => $asset['type_is_crypto'],
                 ]
