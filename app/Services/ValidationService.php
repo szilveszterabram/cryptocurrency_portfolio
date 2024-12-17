@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Asset;
 use App\Models\Portfolio;
 use Illuminate\Http\Request;
 

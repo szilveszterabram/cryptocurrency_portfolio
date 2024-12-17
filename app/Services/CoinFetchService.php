@@ -2,19 +2,15 @@
 
 namespace App\Services;
 
-use App\Enums\CacheKeys;
 use App\Enums\CoinApiEndpoint;
 use App\Models\Asset;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class CoinFetchService
 {
-    public function __construct(protected CacheService $cacheService) {}
-
     public function getHeaders(): array
     {
         return [
@@ -113,27 +109,5 @@ class CoinFetchService
                 );
             }
         }
-    }
-
-    public function storeAssetIconsInCache(array $icons): void
-    {
-        foreach($icons as $icon) {
-            $key = $this->cacheService->getCacheKey(CacheKeys::AssetIcon, $icon['asset_id']);
-            Cache::set($key, $icon['url']);
-        }
-        $totalKey = $this->cacheService->getCacheKey(CacheKeys::AssetTotalIcons);
-        Cache::set($totalKey, count($icons));
-    }
-
-    public function storeAssetsInCache(array $assets, int $perPage = 50): void
-    {
-        $chunks = array_chunk($assets, $perPage);
-        foreach ($chunks as $pageIndex => $chunk) {
-            $key = $this->cacheService->getCacheKey(CacheKeys::AssetPage, $pageIndex + 1);
-            Cache::set($key, $chunk);
-        }
-
-        $totalKey = $this->cacheService->getCacheKey(CacheKeys::AssetTotalPages);
-        Cache::set($totalKey, count($chunks));
     }
 }

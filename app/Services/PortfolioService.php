@@ -2,12 +2,10 @@
 
 namespace App\Services;
 
-use App\Enums\CacheKeys;
 use App\Models\Portfolio;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
@@ -18,7 +16,7 @@ class PortfolioService
     public function __construct(
         protected Portfolio $portfolio,
         protected User $user,
-        protected CacheService $cacheService) {}
+    ) {}
 
     public function hasEntryRedirectFlag(): bool
     {
@@ -75,21 +73,6 @@ class PortfolioService
     public function getEntries(Portfolio $portfolio): Collection
     {
         return $portfolio->entries()->get();
-    }
-
-    public function getEntryIcons(Collection $entryIds): Collection
-    {
-        $result = collect();
-        foreach ($entryIds as $entryId) {
-            $key = $this->cacheService->getCacheKey(CacheKeys::AssetIcon, $entryId);
-            $url = Cache::get($key);
-            $result->push([
-                'id' => $entryId,
-                'url' => $url,
-            ]);
-        }
-
-        return $result;
     }
 
     public function destroy(string $portfolio): void
