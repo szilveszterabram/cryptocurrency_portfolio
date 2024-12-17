@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\AssetService;
 use App\Services\CoinFetchService;
 use App\Services\EntryService;
 use App\Services\PortfolioService;
@@ -17,7 +18,8 @@ class EntryController extends Controller
         protected PortfolioService $portfolioService,
         protected CoinFetchService $coinFetchService,
         protected ValidationService $validationService,
-        protected EntryService $entryService
+        protected EntryService $entryService,
+        protected AssetService $assetService,
     ) {}
 
     public function create(Request $request): Response
@@ -30,12 +32,11 @@ class EntryController extends Controller
 
         $portfolios = $this->portfolioService->getUserPortfolios();
         $asset = $this->coinFetchService->fetchAssetById($assetId);
-        $iconUrl = $this->entryService->getIconUrl($assetId);
-
+        $dbAsset = $this->assetService->getAssetByAssetId($assetId);
 
         return Inertia::render('Entry/Create', [
             'asset' => $asset,
-            'icon_url' => $iconUrl,
+            'icon_url' => $dbAsset['icon_url'],
             'portfolios' => $portfolios,
         ]);
     }

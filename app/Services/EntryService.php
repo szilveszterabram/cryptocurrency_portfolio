@@ -15,12 +15,6 @@ class EntryService
         return $this->entry->create($portfolio, $data);
     }
 
-    public function getIconUrl(string $assetId): string
-    {
-        $asset = Asset::where('asset_id', $assetId)->firstOrFail();
-        return $asset->icon_url;
-    }
-
     public function destroy(string $entry): void
     {
         Entry::findOrFail($entry)->delete();

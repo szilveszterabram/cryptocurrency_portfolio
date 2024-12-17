@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Enums\CoinApiEndpoint;
 use App\Models\Asset;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -47,7 +46,6 @@ class CoinFetchService
     {
         $headers = $this->getHeaders();
         $url = $this->getFullUrl($coinApiEndpoint, $pathParams);
-
         try {
             $response = Http::withHeaders($headers)->get($url, $params);
             return $response->json();
@@ -61,13 +59,6 @@ class CoinFetchService
     {
         // get the 0th index of the result array as it contains the single fetched asset
         return $this->fetchData(CoinApiEndpoint::Assets, [], [$assetId])[0];
-    }
-
-    public function fetchAssetsById(Collection $icons): array
-    {
-        $assetIds = $icons->pluck('id');
-
-        return $this->fetchData(CoinApiEndpoint::Assets, [], [...$assetIds]);
     }
 
     public function fetchAssets(): array

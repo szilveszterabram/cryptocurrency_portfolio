@@ -13,7 +13,7 @@ const properties = defineProps<{
         name: string;
         price_usd: number;
     };
-    icon_url?: string;
+    icon_url: string;
     portfolios: Array<{
         id: number;
         name: string;
@@ -70,7 +70,6 @@ const buy = () => {
             <img
                 class="mr-2 flex"
                 :src="icon_url"
-                :alt="asset.asset_id"
                 width="30"
                 height="30"
                 v-if="icon_url != null"
@@ -85,15 +84,14 @@ const buy = () => {
                 Price of 1 {{ asset.name }}: ${{ asset.price_usd }}
             </p>
             <p class="mb-4 text-lg">
-                Price of 1 USD: {{ asset.asset_id
-                }}{{ 1 / parseFloat(asset.price_usd) }}
+                Price of 1 USD: {{ asset.asset_id }}{{ 1 / asset.price_usd }}
             </p>
 
             <TextInput
                 name="USD amount"
                 :model-value="buy_form.buy_price"
                 type="number"
-                :error-message="buy_form.errors.buy_price"
+                :error-message="form.errors.amount"
                 @update:model-value="(value) => (buy_form.buy_price = value)"
                 :positive-only="true"
             /><TextInput

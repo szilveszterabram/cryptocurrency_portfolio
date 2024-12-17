@@ -66,7 +66,6 @@ class PortfolioService
     {
         Session::put('redirect_to_entry_create', true);
         Session::put('asset_id_to_create', $assetId);
-        Log::debug('Redirecting to portfolios/ create');
         return Inertia::render('Portfolio/Create');
     }
 

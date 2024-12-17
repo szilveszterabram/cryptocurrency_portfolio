@@ -26,4 +26,9 @@ class AssetService
         }
         return $res;
     }
+
+    public function getAssetByAssetId(string $assetId): Asset
+    {
+        return Asset::where('asset_id', $assetId)->firstOrFail();
+    }
 }
