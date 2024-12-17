@@ -26,4 +26,12 @@ class ValidationService
             'name' => 'required|string|max:255'
         ]);
     }
+
+    public function validatePriceObservation(Request $request): array
+    {
+        return $request->validate([
+            'target' => 'required|numeric|gt:0',
+            'active' => 'required|boolean',
+        ]);
+    }
 }

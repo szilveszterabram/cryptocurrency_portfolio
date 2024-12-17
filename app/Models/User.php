@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Portfolio::class);
     }
+
+    public function priceObservations(): HasMany
+    {
+        return $this->hasmany(PriceObservation::class);
+    }
 }
