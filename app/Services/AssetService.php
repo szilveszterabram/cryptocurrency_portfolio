@@ -29,9 +29,7 @@ class AssetService
     public function getAssetPage(int $pageNumber): array
     {
         $key = $this->cacheService->getCacheKey(CacheKeys::AssetPage, $pageNumber);
-        return json_decode(
-            Cache::get($key), true
-        );
+        return Cache::get($key);
     }
 
     public function getAssetsTotalPages(): int

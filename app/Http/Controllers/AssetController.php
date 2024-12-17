@@ -15,12 +15,12 @@ class AssetController extends Controller
     {
         $pageNumber = $this->assetService->getRequestPage($request);
         $assets = $this->assetService->getAssetPage($pageNumber);
-        $total_pages = $this->assetService->getAssetsTotalPages();
+        $totalPages = $this->assetService->getAssetsTotalPages();
         $icons = $this->assetService->getIconUrlsForAssets($assets);
 
         return Inertia::render('Asset/Index', [
             'assets' => $assets,
-            'total_pages' => $total_pages,
+            'total_pages' => $totalPages,
             'page' => $pageNumber,
             'icons' => $icons,
         ]);

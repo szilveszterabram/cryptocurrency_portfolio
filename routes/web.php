@@ -2,10 +2,7 @@
 
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\EntryController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use \App\Http\Controllers\PortfolioController;
 
 Route::inertia('/register', 'Auth/Register');
@@ -38,4 +35,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-require __DIR__.'/api.php';

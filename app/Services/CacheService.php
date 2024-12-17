@@ -12,7 +12,7 @@ class CacheService
         return Cache::get('assets:icon:' . $assetId);
     }
 
-    public function getCacheKey(CacheKeys $key, string|null $value): string
+    public function getCacheKey(CacheKeys $key, ?string $value = null): string
     {
         return $key->value . $value;
     }
