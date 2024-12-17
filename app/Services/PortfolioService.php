@@ -83,7 +83,6 @@ class PortfolioService
         foreach ($entryIds as $entryId) {
             $key = $this->cacheService->getCacheKey(CacheKeys::AssetIcon, $entryId);
             $url = Cache::get($key);
-            Log::debug($url);
             $result->push([
                 'id' => $entryId,
                 'url' => $url,

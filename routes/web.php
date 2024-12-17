@@ -17,10 +17,12 @@ Route::middleware('auth')->group(function () {
         ->name('welcome');
     Route::inertia('/profile', 'Profile/Edit')
         ->name('profile');
+    Route::inertia('/assets', 'Asset/Index')
+        ->name('assets');
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/assets/{key}', [AssetController::class, 'page'])->name('assets.page');
+    Route::get('/assets', [AssetController::class, 'index'])->name('assets');
 
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create');

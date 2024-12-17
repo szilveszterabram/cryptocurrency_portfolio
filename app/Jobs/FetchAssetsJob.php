@@ -15,6 +15,6 @@ class FetchAssetsJob implements ShouldQueue
     public function handle(): void
     {
         $assets = $this->coinFetchService->fetchAssets();
-        $this->coinFetchService->storeAssetsInCache($assets);
+        $this->coinFetchService->update($assets);
     }
 }

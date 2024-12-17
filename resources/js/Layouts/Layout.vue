@@ -11,14 +11,7 @@
                     class="flex w-full justify-evenly space-x-6 self-start text-xl"
                 >
                     <Link :href="route('welcome')">Home</Link>
-                    <Link
-                        :href="
-                            route('assets.page', {
-                                key: 1,
-                            })
-                        "
-                        >Assets</Link
-                    >
+                    <Link :href="route('assets')">Assets</Link>
                     <Link :href="route('portfolio')">My Portfolios</Link>
                     <Link :href="route('profile')">{{
                         $page.props.auth.user.name

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\CacheKeys;
 use App\Enums\CoinApiEndpoint;
+use App\Models\Asset;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -81,6 +82,37 @@ class CoinFetchService
     public function fetchAssetIcons(): array
     {
         return $this->fetchData(CoinApiEndpoint::Icons);
+    }
+
+    public function update(array $data): void
+    {
+        foreach ($data as $asset) {
+            Asset::updateOrCreate(
+                [
+                    'asset_id' => $asset['asset_id'],
+                ],
+                [
+                    'asset_id' => $asset['asset_id'],
+                    'name' => $asset['name'],
+                    'price_usd' => array_key_exists('price_usd', $asset) ? $asset['price_usd'] : -1,
+                    'type_is_crypto' => $asset['type_is_crypto'],
+                ]
+            );
+        }
+    }
+
+    public function updateIcons(array $data): void
+    {
+        foreach ($data as $icon) {
+            $asset = Asset::where('asset_id', $icon['asset_id'])->first();
+            if ($asset) {
+                $asset->update(
+                    [
+                        'icon_url' => $icon['url'],
+                    ],
+                );
+            }
+        }
     }
 
     public function storeAssetIconsInCache(array $icons): void

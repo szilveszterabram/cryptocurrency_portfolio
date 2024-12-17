@@ -15,6 +15,6 @@ class FetchAssetIconsJob implements ShouldQueue
     public function handle(): void
     {
         $icons = $this->coinFetchService->fetchAssetIcons();
-        $this->coinFetchService->storeAssetIconsInCache($icons);
+        $this->coinFetchService->updateIcons($icons);
     }
 }

@@ -11,18 +11,12 @@ class AssetController extends Controller
 {
     public function __construct(protected AssetService $assetService) {}
 
-    public function page(Request $request): Response
+    public function index(Request $request): Response
     {
-        $pageNumber = $this->assetService->getRequestPage($request);
-        $assets = $this->assetService->getAssetPage($pageNumber);
-        $totalPages = $this->assetService->getAssetsTotalPages();
-        $icons = $this->assetService->getIconUrlsForAssets($assets);
+        $assets = $this->assetService->getAll();
 
         return Inertia::render('Asset/Index', [
             'assets' => $assets,
-            'total_pages' => $totalPages,
-            'page' => $pageNumber,
-            'icons' => $icons,
         ]);
     }
 }
