@@ -18,22 +18,16 @@ const properties = defineProps<{
         price_at_buy: number;
         created_at: string;
     }[];
-    icons: {
-        id: string;
-        url: string;
-    }[];
     data: {
         asset_id: string;
         name: string;
         price_usd: number;
+        icon_url: string;
     }[];
 }>();
 
 const entriesWithIcons = computed(() => {
     return properties.entries.map((entry) => {
-        const icon = properties.icons.find(
-            (icon) => icon.id === entry.asset_short,
-        );
         const assetData = properties.data.find(
             (asset) => asset.asset_id === entry.asset_short,
         );
@@ -44,9 +38,9 @@ const entriesWithIcons = computed(() => {
 
         return {
             ...entry,
-            iconUrl: icon ? icon.url : null,
             currentPrice,
             percentageChange,
+            assetData,
         };
     });
 });
@@ -79,8 +73,8 @@ const entriesWithIcons = computed(() => {
                 <tr v-for="entry in entriesWithIcons" :key="entry.id">
                     <td>
                         <img
-                            v-if="entry.iconUrl"
-                            :src="entry.iconUrl"
+                            v-if="entry.assetData!.icon_url"
+                            :src="entry.assetData!.icon_url"
                             alt="Icon"
                             width="30"
                             height="30"
@@ -129,6 +123,13 @@ const entriesWithIcons = computed(() => {
                                 ' rounded p-2 text-white hover:cursor-pointer'
                             "
                             :size="50"
+                            @click="
+                                router.delete(
+                                    route('entry.destroy', {
+                                        entry: entry.id,
+                                    }),
+                                )
+                            "
                         />
                     </td>
                 </tr>

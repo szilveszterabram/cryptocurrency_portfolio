@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/entry/create', [EntryController::class, 'create'])->name('entry.create');
     Route::post('/entry/store', [EntryController::class, 'store'])->name('entry.store');
+    Route::delete('/entry/{entry}', [EntryController::class, 'destroy'])->name('entry.destroy');
 });
 
 require __DIR__.'/auth.php';

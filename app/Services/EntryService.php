@@ -20,4 +20,9 @@ class EntryService
         $asset = Asset::where('asset_id', $assetId)->firstOrFail();
         return $asset->icon_url;
     }
+
+    public function destroy(string $entry): void
+    {
+        Entry::findOrFail($entry)->delete();
+    }
 }

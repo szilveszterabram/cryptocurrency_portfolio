@@ -49,4 +49,9 @@ class EntryController extends Controller
 
         return redirect('portfolio');
     }
+
+    public function destroy(string $entry): void
+    {
+        $this->entryService->destroy($entry);
+    }
 }
