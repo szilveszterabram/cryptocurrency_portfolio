@@ -8,6 +8,8 @@ use Illuminate\Support\Collection;
 
 class AssetService
 {
+    public function __construct(protected CoinFetchService $coinFetchService) {}
+
     public function getAll(): LengthAwarePaginator
     {
         return Asset
@@ -21,7 +23,9 @@ class AssetService
     {
         $res = new Collection();
         foreach ($entries as $entry) {
-            $asset = Asset::where('asset_id', $entry['asset_short'])->first();
+            $dbAsset = Asset::where('asset_id', $entry['asset_short'])->first();
+            $asset = $this->coinFetchService->fetchAssetById($entry['asset_short']);
+            $asset['icon_url'] = $dbAsset->icon_url;
             $res->push($asset);
         }
         return $res;

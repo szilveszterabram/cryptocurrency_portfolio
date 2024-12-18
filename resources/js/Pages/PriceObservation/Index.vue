@@ -42,9 +42,8 @@ const properties = defineProps<{
                 <td>${{ observation.target }}</td>
                 <td
                     :class="
-                        'font-bold ' + observation.active
-                            ? 'text-green-600'
-                            : 'text-red-500'
+                        'font-bold ' +
+                        (observation.active ? 'text-green-600' : 'text-red-500')
                     "
                 >
                     {{ observation.active ? 'Active' : 'Inactive' }}

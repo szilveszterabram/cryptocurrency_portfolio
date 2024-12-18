@@ -20,6 +20,11 @@ class PriceObservationService
         return $user->priceObservations()->get();
     }
 
+    public function getAllByAssetId(string $assetId): Collection
+    {
+        return PriceObservation::where('asset_id', $assetId)->get();
+    }
+
     public function create(array $data): void
     {
         $user = $this->user->getAuthenticatedUser();
