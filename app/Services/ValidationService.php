@@ -32,6 +32,7 @@ class ValidationService
         return $request->validate([
             'target' => 'required|numeric|gt:0',
             'active' => 'required|boolean',
+            'asset_id' => 'required',
         ]);
     }
 }

@@ -13,6 +13,7 @@
                     <Link :href="route('welcome')">Home</Link>
                     <Link :href="route('assets')">Assets</Link>
                     <Link :href="route('portfolio')">My Portfolios</Link>
+                    <Link :href="route('observation')">My Observations</Link>
                     <Link :href="route('profile')">{{
                         $page.props.auth.user.name
                     }}</Link>

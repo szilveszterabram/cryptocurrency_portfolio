@@ -41,6 +41,7 @@ const properties = defineProps<{
                     <td>Name</td>
                     <td>Price USD</td>
                     <td>Buy</td>
+                    <td>Watch</td>
                 </tr>
                 <tr v-for="asset in assets.data" :key="asset.asset_id">
                     <td>
@@ -71,6 +72,21 @@ const properties = defineProps<{
                             "
                         >
                             Buy
+                        </button>
+                    </td>
+                    <td>
+                        <button
+                            class="rounded bg-gray-100 p-2 hover:bg-black hover:text-white"
+                            v-if="asset.price_usd != null"
+                            @click="
+                                router.get(
+                                    route('observation.create', {
+                                        asset: asset.asset_id,
+                                    }),
+                                )
+                            "
+                        >
+                            Notify me
                         </button>
                     </td>
                 </tr>

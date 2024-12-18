@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('price_observations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('users')->constrained()->cascadeOnDelete();
-            $table->foreignId('assets')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('asset_id');
             $table->double('target')->nullable(false);
             $table->boolean('active')->default(true)->nullable(false);
             $table->timestamps();

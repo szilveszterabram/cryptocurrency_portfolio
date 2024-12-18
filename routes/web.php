@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\EntryController;
+use App\Http\Controllers\PriceObservationController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\PortfolioController;
 
@@ -35,6 +36,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/entry/create', [EntryController::class, 'create'])->name('entry.create');
     Route::post('/entry/store', [EntryController::class, 'store'])->name('entry.store');
     Route::delete('/entry/{entry}', [EntryController::class, 'destroy'])->name('entry.destroy');
+
+    Route::get('/observations', [PriceObservationController::class, 'index'])->name('observation');
+    Route::get('/observation/{asset}', [PriceObservationController::class, 'create'])->name('observation.create');
+    Route::post('/observation', [PriceObservationController::class, 'store'])->name('observation.store');
+    Route::delete('/observation/{observation}', [PriceObservationController::class, 'destroy'])->name('observation.destroy');
 });
 
 require __DIR__.'/auth.php';

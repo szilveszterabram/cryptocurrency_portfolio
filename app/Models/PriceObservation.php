@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PriceObservation extends Model
 {
     protected $fillable = [
+        'asset_id',
         'target',
         'active'
     ];
