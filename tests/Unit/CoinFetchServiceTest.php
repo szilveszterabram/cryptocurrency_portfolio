@@ -29,7 +29,7 @@ describe('coinFetchService', function() {
             ->toStartWith('https://');
     });
 
-    test('getRoute to return routes based on enum values', function() {
+    test('getRoute returns routes based on enum values', function() {
         $coinFetchService = new CoinFetchService();
 
         $assetRoute = $coinFetchService->getRoute(CoinApiEndpoint::Assets);
@@ -45,7 +45,7 @@ describe('coinFetchService', function() {
             ->toStartWith('/');
     });
 
-    test('getFullUrl to use the base functions correctly and return an api endpoint', function() {
+    test('getFullUrl uses base functions correctly and returns an api endpoint', function() {
         $coinFetchService = new CoinFetchService();
 
         $baseUrl = $coinFetchService->getBaseUrl();
