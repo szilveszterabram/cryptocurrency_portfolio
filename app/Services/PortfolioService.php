@@ -20,7 +20,7 @@ class PortfolioService
 
     public function hasEntryRedirectFlag(): bool
     {
-        return session('redirect_to_entry_create') == null;
+        return session()->get('redirect_to_entry_create') != null;
     }
 
     public function redirectToEntryCreate(): RedirectResponse
