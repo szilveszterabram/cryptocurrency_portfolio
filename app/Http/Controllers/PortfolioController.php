@@ -44,7 +44,7 @@ class PortfolioController extends Controller
         $this->portfolioService->create($validated);
 
         if ($this->portfolioService->hasEntryRedirectFlag()) {
-            $this->portfolioService->redirectToEntryCreate();
+            return $this->portfolioService->redirectToEntryCreate();
         }
 
         return redirect(route('portfolio'));
