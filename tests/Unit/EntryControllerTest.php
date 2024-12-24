@@ -5,22 +5,20 @@ use App\Models\Asset;
 use App\Models\Entry;
 use App\Models\Portfolio;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
-use function Pest\Laravel\actingAs;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
-use function Pest\Laravel\withoutMiddleware;
 
-uses(RefreshDatabase::class);
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    login($this->user);
+
+    $this->withoutMiddleware();
+});
 
 describe('EntryController', function() {
     test('create redirects to portfolio creation page if the user does not have any portfolios', function () {
-        withoutMiddleware();
-        $user = User::factory()->create();
-        actingAs($user);
-
         Asset::factory()->count(1)->create();
 
         $response = get(action([EntryController::class, 'create']));
@@ -30,11 +28,7 @@ describe('EntryController', function() {
     });
 
     test('create redirects to entry creation page if a user has at least one portfolio', function () {
-        withoutMiddleware();
-        $user = User::factory()->create();
-        actingAs($user);
-
-        Portfolio::factory()->for($user)->count(1)->create();
+        Portfolio::factory()->for($this->user)->count(1)->create();
 
         Asset::factory()->create([
             'asset_id' => 'BTC',
@@ -50,11 +44,7 @@ describe('EntryController', function() {
     });
 
     test('store validates the request data, creates the entry and redirects to the portfolio', function () {
-        withoutMiddleware();
-        $user = User::factory()->create();
-        actingAs($user);
-
-        Portfolio::factory()->for($user)->count(1)->create();
+        Portfolio::factory()->for($this->user)->count(1)->create();
         $portfolio = Portfolio::first();
 
         $asset = Asset::factory()->create([
@@ -75,18 +65,15 @@ describe('EntryController', function() {
 
         $entry = Entry::first();
 
-        expect($entry['portfolio_id'])->toBe($portfolio->id)
-            ->and($entry['asset_short'])->toBe($asset->asset_id)
-            ->and($entry['asset_long'])->toBe($asset->name)
-            ->and($entry['amount'])->toBe(1.5)
-            ->and($entry['price_at_buy'])->toBe(50000.0);
+        expect($entry)
+            ->portfolio_id->toBe($portfolio->id)
+            ->asset_short->toBe($asset->asset_id)
+            ->asset_long->toBe($asset->name)
+            ->amount->toEqual(1.5)
+            ->price_at_buy->toEqual(50000.0);
     });
 
     test('destroy delete the given entry from the database', function () {
-        withoutMiddleware();
-        $user = User::factory()->create();
-        actingAs($user);
-
         Entry::factory()->create();
         $entry = Entry::first();
 
