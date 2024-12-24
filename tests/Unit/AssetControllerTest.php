@@ -5,11 +5,10 @@ use Database\Seeders\AssetTestSeeder;
 use Inertia\Testing\AssertableInertia;
 use function Pest\Laravel\get;
 use function Pest\Laravel\seed;
-use function Pest\Laravel\withoutMiddleware;
 
 describe('AssetController', function() {
     test('index redirects to the assets index page with all assets in a paginated form', function () {
-        withoutMiddleware();
+        login();
         seed(AssetTestSeeder::class);
 
         $response = get(action([AssetController::class, 'index']));
