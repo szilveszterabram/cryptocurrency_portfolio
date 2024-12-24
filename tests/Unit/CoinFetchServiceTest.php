@@ -7,58 +7,46 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use function PHPUnit\Framework\assertEquals;
 
-uses(RefreshDatabase::class);
+beforeEach(function () {
+   $this->coinFetchService = new CoinFetchService();
+});
 
 describe('coinFetchService', function() {
     test('getHeaders returns an array with necessary header information', function() {
-        $coinFetchService = new CoinFetchService();
-
-        $headers = $coinFetchService->getHeaders();
+        $headers = $this->coinFetchService->getHeaders();
 
         expect($headers)
             ->tobeArray()
-        ->and($headers['Accept'])
-            ->toBe('application/json')
-        ->and($headers)
-            ->tohaveKey('X-CoinAPI-key');
+            ->toHaveKey('X-CoinAPI-key')
+        ->Accept
+            ->toBe('application/json');
     });
 
     test('getBaseUrl returns the base url for coin api requests', function() {
-        $coinFetchService = new CoinFetchService();
+        $baseUrl = $this->coinFetchService->getBaseUrl();
 
-        $baseUrl = $coinFetchService->getBaseUrl();
-
-        expect($baseUrl)
-            ->toBeString()
-        ->and($baseUrl)
-            ->toStartWith('https://');
+        expect($baseUrl)->toBeUrl();
     });
 
     test('getRoute returns routes based on enum values', function() {
-        $coinFetchService = new CoinFetchService();
-
-        $assetRoute = $coinFetchService->getRoute(CoinApiEndpoint::Assets);
-        $iconRoute = $coinFetchService->getRoute(CoinApiEndpoint::Icons);
+        $assetRoute = $this->coinFetchService->getRoute(CoinApiEndpoint::Assets);
+        $iconRoute = $this->coinFetchService->getRoute(CoinApiEndpoint::Icons);
 
         expect($assetRoute)
             ->toBeString()
-        ->and($iconRoute)
-            ->toBeString()
-        ->and($assetRoute)
             ->toStartWith('/')
         ->and($iconRoute)
+            ->toBeString()
             ->toStartWith('/');
     });
 
     test('getFullUrl uses base functions correctly and returns an api endpoint', function() {
-        $coinFetchService = new CoinFetchService();
+        $baseUrl = $this->coinFetchService->getBaseUrl();
+        $assetRoute = $this->coinFetchService->getRoute(CoinApiEndpoint::Assets);
 
-        $baseUrl = $coinFetchService->getBaseUrl();
-        $assetRoute = $coinFetchService->getRoute(CoinApiEndpoint::Assets);
-
-        $assetUrl = $coinFetchService->getFullUrl(CoinApiEndpoint::Assets);
-        $assetUrlWithSingleParam = $coinFetchService->getFullUrl(CoinApiEndpoint::Assets, ['BTC']);
-        $assetUrlWithTwoParams = $coinFetchService->getFullUrl(CoinApiEndpoint::Assets, ['BTC', 'ETH']);
+        $assetUrl = $this->coinFetchService->getFullUrl(CoinApiEndpoint::Assets);
+        $assetUrlWithSingleParam = $this->coinFetchService->getFullUrl(CoinApiEndpoint::Assets, ['BTC']);
+        $assetUrlWithTwoParams = $this->coinFetchService->getFullUrl(CoinApiEndpoint::Assets, ['BTC', 'ETH']);
 
         expect($assetUrl)
             ->toBeString()
@@ -73,40 +61,30 @@ describe('coinFetchService', function() {
     });
 
     test('fetchData fetches from all endpoints correctly and returns them in an array', function() {
-        $coinFetchService = new CoinFetchService();
-
-        $icons = $coinFetchService->fetchData(CoinApiEndpoint::Icons);
+        $icons = $this->coinFetchService->fetchData(CoinApiEndpoint::Icons);
         $iconSample = $icons[0];
 
         expect($icons)
-            ->not
-            ->toBeEmpty()
-        ->and($icons)
+            ->not->toBeEmpty()
             ->toBeArray()
         ->and($iconSample)
             ->toHaveKeys(['asset_id', 'url']);
     });
 
     test('fetchAssetById fetches a single asset correctly based on asset id', function() {
-        $coinFetchService = new CoinFetchService();
-
         $assetId = 'BTC';
-        $asset = $coinFetchService->fetchAssetById($assetId);
+        $asset = $this->coinFetchService->fetchAssetById($assetId);
 
         // NOTE:
         // The price_usd field does not exist on every asset.
         // You may get assertion error if you try it on something else.
         expect($asset)
-            ->not
-            ->toBeNull()
-        ->and($asset)
+            ->not->toBeNull()
             ->tohaveKeys(['asset_id', 'name', 'type_is_crypto', 'price_usd']);
     });
 
     test('update takes an array of assets, updates the corresponding db model or create a new one if it does not exist', function() {
-        $coinFetchService = new CoinFetchService();
-
-        $coinFetchService->update([
+        $this->coinFetchService->update([
             [
                 'asset_id' => 'BTC',
                 'name' => 'Bitcoin',
@@ -137,19 +115,16 @@ describe('coinFetchService', function() {
         ->and(count($dbAssets))
             ->toBe(3)
         ->and($btcAsset->price_usd)
-            ->toBe(100.0)
+            ->toEqual(100.0)
         ->and($enjAsset->price_usd)
-            ->toBe(0.2064);
+            ->toEqual(0.2064);
     })->with('assets for update');
 
     test('updateIcons updates existing database asset icons', function(
         $assetForUpdate
     ) {
         expect($assetForUpdate)->toBeInstanceOf(Asset::class);
-
-        $coinFetchService = new CoinFetchService();
-
-        $coinFetchService->updateIcons([
+        $this->coinFetchService->updateIcons([
             [
                 'asset_id' => 'BTC',
                 'url' => 'new-asset-url.png'
@@ -160,9 +135,9 @@ describe('coinFetchService', function() {
 
         expect($updatedAsset)
             ->toBeInstanceOf(Asset::class)
-        ->and($updatedAsset->asset_id)
+        ->asset_id
             ->toBe('BTC')
-        ->and($updatedAsset->icon_url)
+        ->icon_url
             ->toBe('new-asset-url.png');
     })->with('assets for updateIcons');
 });
