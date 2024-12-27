@@ -5,10 +5,16 @@ use App\Models\Asset;
 use App\Models\Entry;
 use App\Models\Portfolio;
 use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Session;
 use Inertia\Testing\AssertableInertia;
+use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
+use function Pest\Laravel\patch;
 use function Pest\Laravel\post;
+use function Pest\Laravel\put;
+use function Pest\Laravel\withMiddleware;
 use function Pest\Laravel\withoutMiddleware;
 
 beforeEach(function () {
@@ -65,37 +71,70 @@ describe('PortfolioController', function() {
     })->with('create data');
 
     test('show redirects to the portfolio show page with all entries inside it', function () {
-        $portfolio = Portfolio::factory()->count(1)->create();
+        Portfolio::factory()->create();
+        $portfolio = Portfolio::first();
+
         Asset::factory()->create([
-            [
-                'asset_id' => 'BTC',
-                'name' => 'Bitcoin',
-                'price_usd' => 100000.54321,
-                'type_is_crypto' => true,
-                'icon_url' => fake()->imageUrl()
-            ],
-            [
-                'asset_id' => 'ETH',
-                'name' => 'Ethereum',
-                'price_usd' => 352.34,
-                'type_is_crypto' => true,
-                'icon_url' => fake()->imageUrl()
-            ]
+            'asset_id' => 'BTC',
+            'name' => 'Bitcoin',
+            'price_usd' => 100000.54321,
+            'type_is_crypto' => true,
+            'icon_url' => fake()->imageUrl()
         ]);
 
         Entry::factory()->for($portfolio)->create([
-            [
-                'asset_short' => 'BTC',
-                'asset_long' => 'Bitcoin',
-                'amount' => 0.003,
-                'price_at_buy' => 63.123
-            ],
-            [
-                'asset_short' => 'ETH',
-                'asset_long' => 'Ethereum',
-                'amount' => 15,
-                'price_at_buy' => 132.22
-            ]
+            'asset_short' => 'BTC',
+            'asset_long' => 'Bitcoin',
+            'amount' => 0.003,
+            'price_at_buy' => 63.123
         ]);
+
+        $response = get(action([PortfolioController::class, 'show'], $portfolio));
+
+        $response->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Portfolio/Show')
+            ->has('portfolio')
+            ->has('entries')
+            ->has('data')
+        );
+    });
+
+    test('edit redirect to the portfolio edit page with the correct portfolio model', function () {
+       Portfolio::factory()->create();
+       $portfolio = Portfolio::first();
+
+       $response = get(action([PortfolioController::class, 'edit'], $portfolio));
+
+       $response->assertInertia(fn (AssertableInertia $page) => $page
+           ->component('Portfolio/Edit')
+           ->has('portfolio')
+       );
+    });
+
+    test('update validates the request data, updates the portfolio and redirects to portfolio index page', function () {
+        Portfolio::factory()->create();
+        $portfolio = Portfolio::first();
+
+        $data = [
+            'name' => 'Holdings',
+        ];
+
+        $response = patch(action([PortfolioController::class, 'update'], $portfolio), $data);
+
+        expect($response)
+            ->assertStatus(302)
+            ->assertRedirect(route('portfolio'));
+    });
+
+    test('destroy deletes the given portfolio without redirect', function () {
+        Portfolio::factory()->create();
+        $portfolio = Portfolio::first();
+
+        delete(action([PortfolioController::class, 'destroy'], $portfolio));
+
+        $remaining = Portfolio::find($portfolio->id);
+
+        expect($remaining)
+            ->toBeNull();
     });
 });
