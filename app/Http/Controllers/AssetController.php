@@ -13,7 +13,8 @@ class AssetController extends Controller
 
     public function index(Request $request): Response
     {
-        $assets = $this->assetService->getAll();
+        $search = $request->query('search', '');
+        $assets = $this->assetService->getAll(strtoupper($search));
 
         return Inertia::render('Asset/Index', [
             'assets' => $assets,

@@ -10,10 +10,11 @@ class AssetService
 {
     public function __construct(protected CoinFetchService $coinFetchService) {}
 
-    public function getAll(): LengthAwarePaginator
+    public function getAll(string $searchParam = ""): LengthAwarePaginator
     {
         return Asset
             ::where([
+                ['asset_id', 'LIKE', "%{$searchParam}%"],
                 ['price_usd', '>', -1],
                 ['icon_url', '!=', null]])
             ->paginate();

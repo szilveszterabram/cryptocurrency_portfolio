@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import TextInput from '@/Components/TextInput.vue';
 import { router } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+
+const searchValue = ref('');
 
 const properties = defineProps<{
     assets: {
@@ -27,10 +31,21 @@ const properties = defineProps<{
         total: number;
     };
 }>();
+
+watch(searchValue, (newValue) => {
+    router.get(route('assets'), { search: newValue }, { preserveState: true });
+});
 </script>
 
 <template>
     <div class="flex h-full w-full flex-col">
+        <TextInput
+            name="search"
+            type="text"
+            :model-value="searchValue"
+            placeholder="Type an in short form (Ex.: BTC)"
+            @input="searchValue = $event.target.value"
+        />
         <table>
             <tbody>
                 <tr
@@ -98,7 +113,9 @@ const properties = defineProps<{
             <button
                 class="mx-2 rounded bg-black p-2 text-lg text-white disabled:bg-gray-100 disabled:text-gray-500"
                 :disabled="assets.prev_page_url == null"
-                @click="router.get(assets.prev_page_url!)"
+                @click="
+                    router.get(assets.prev_page_url!, { search: searchValue })
+                "
             >
                 Previous
             </button>
@@ -106,7 +123,9 @@ const properties = defineProps<{
             <button
                 class="mx-2 rounded bg-black p-2 text-lg text-white disabled:bg-gray-100 disabled:text-gray-500"
                 :disabled="assets.next_page_url == null"
-                @click="router.get(assets.next_page_url!)"
+                @click="
+                    router.get(assets.next_page_url!, { search: searchValue })
+                "
             >
                 Next
             </button>
