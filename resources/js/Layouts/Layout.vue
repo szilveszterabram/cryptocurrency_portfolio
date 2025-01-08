@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
+</script>
 
 <template>
     <div class="flex h-full w-full bg-gray-50">

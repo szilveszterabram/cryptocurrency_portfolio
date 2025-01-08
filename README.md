@@ -26,9 +26,9 @@
 > * The application's server side runs on [**Laravel 11**](https://laravel.com/), which serves a 
 [**Vue**](https://vuejs.org/) frontend using [**Inertia**](https://inertiajs.com/).  
 > * As for storing data, **PostgreSQL** is used along with **Redis**.
->  * The application uses PostgreSQL to store general app & user data.
->  * PostgreSQL is also used for managing the queue systems and its jobs.
->  * Redis is used as a solution for caching.
+> * The application uses PostgreSQL to store general app & user data.
+> * PostgreSQL is also used for managing the queue systems and its jobs.
+> * Redis is used as a solution for caching.
 > * All coin data are fetched from [**CoinAPI.io**](https://www.coinapi.io/?_gl=1*1g124kb*_ga*MTIzMjgzMDMxMy4xNzM2MzIzODg1*_ga_EXCQW96F7R*MTczNjMyMzg4NC4xLjEuMTczNjMyMzg4OC4wLjAuMA..).
 
 ## Core functionalities
@@ -50,7 +50,7 @@ list, the fetching <em>does not</em> happen each time the page is loaded.
 Instead of fetching each time upon loading, there are two instances when all coin data are fetched:
 > * On User login
 > * On schedule
->  * A scheduled job is set to run **every 10 minutes**
+>   * A scheduled job is set to run **every 10 minutes**
 
 Upon successfully fetching the coin data, all coin entries are updated in the PostgreSQL database   
 or created in the case they did not previously exist.
