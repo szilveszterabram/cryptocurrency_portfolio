@@ -16,7 +16,7 @@ beforeEach(function () {
     );
 
     $this->user = User::factory()->create();
-   login($this->user);
+    login($this->user);
 });
 
 describe('PriceObservationService', function() {
