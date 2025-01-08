@@ -17,7 +17,7 @@ class AssetController extends Controller
         $assets = $this->assetService->getAll(strtoupper($search));
 
         return Inertia::render('Asset/Index', [
-            'assets' => $assets,
+            'assets' => Inertia::merge($assets->toArray()),
         ]);
     }
 }

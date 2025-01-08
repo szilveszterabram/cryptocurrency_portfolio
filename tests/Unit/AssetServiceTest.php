@@ -40,6 +40,6 @@ describe('AssetService', function () {
             ->name->toBe($factoryAsset['name'])
             ->price_usd->toEqual($factoryAsset['price_usd'])
             ->icon_url->toBe($factoryAsset['icon_url'])
-            ->type_is_crypto->toBe($factoryAsset['type_is_crypto']);
+            ->type_is_crypto->toBe((int)$factoryAsset['type_is_crypto']);
     })->with('asset for get asset by asset id');
 });

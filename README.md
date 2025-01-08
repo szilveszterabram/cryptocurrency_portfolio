@@ -10,7 +10,9 @@
   * [Displaying coin price data](#displaying-coin-price-data)
   * [Creating multiple account-based portfolios](#creating-multiple-account-based-portfolios)
   * [Purchasing cryptocurrencies](#purchasing-cryptocurrencies)
-  * [Creating price observations](#creating-price-observations) 
+  * [Creating price observations](#creating-price-observations)
+* [The Queue system](#the-queue-system)
+  * [Using the queue for jobs that are costly](#using-the-queue-for-jobs-that-are-costly)
 
 ## Running the application locally
 ```shell
@@ -79,3 +81,19 @@ Here, just like when buying coins, the single coin data gets fetched from the AP
 Users may set a **target price** for when they wish to be notified about a coin's price change.
 When a coin reaches the target price, an email gets sent to the user. Then, the price observation **becomes inactive**,
 which the user can later delete, if they wish to.
+
+## The Queue system
+
+### Using the queue for jobs that are costly
+
+Fetching all cryptocurrency information from the API, and then checking for each fetched entry to update it - is
+a costly piece of logic that needs to be run relatively often. In order to provide a better user experience, and to
+**not block the user interface** on each fetch, the application uses the **queue**.  
+The coin data needs to be fetched from two separate endpoints:
+> * Main coin data from https://rest.coinapi.io/v1/assets
+> * Images corresponding to coins from https://rest.coinapi.io/v1/assets/icons/25  
+
+Having to fetch from two different endpoints, the application uses **two Jobs**.  
+The jobs can get triggered by **event listeners**.
+
+
