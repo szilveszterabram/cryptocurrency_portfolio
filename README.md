@@ -94,6 +94,13 @@ The coin data needs to be fetched from two separate endpoints:
 > * Images corresponding to coins from https://rest.coinapi.io/v1/assets/icons/25  
 
 Having to fetch from two different endpoints, the application uses **two Jobs**.  
-The jobs can get triggered by **event listeners**.
+The below diagram tries to demonstrate the logic of running these jobs:
+
+```
+(10MinuteSchedule OR LoggedIn) EVENT DISPATCHED:
+    -> FetchAssetData LISTENER TRIGGERED:
+        -> FetchAssetJob RUNS
+        -> FetchAssetIconsJob RUNS
+```
 
 
