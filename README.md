@@ -9,6 +9,8 @@
   * [Overview](#overview)
   * [Displaying coin price data](#displaying-coin-price-data)
   * [Creating multiple account-based portfolios](#creating-multiple-account-based-portfolios)
+  * [Purchasing cryptocurrencies](#purchasing-cryptocurrencies)
+  * [Creating price observations](#creating-price-observations) 
 
 ## Running the application locally
 ```shell
@@ -21,24 +23,24 @@
 
 ### Application architecture
 
-* The application's server side runs on [**Laravel 11**](https://laravel.com/), which serves a 
+> * The application's server side runs on [**Laravel 11**](https://laravel.com/), which serves a 
 [**Vue**](https://vuejs.org/) frontend using [**Inertia**](https://inertiajs.com/).  
-* As for storing data, **PostgreSQL** is used along with **Redis**.
-  * The application uses PostgreSQL to store general app & user data.
-  * PostgreSQL is also used for managing the queue systems and its jobs.
-  * Redis is used as a solution for caching.
-* All coin data are fetched from [**CoinAPI.io**](https://www.coinapi.io/?_gl=1*1g124kb*_ga*MTIzMjgzMDMxMy4xNzM2MzIzODg1*_ga_EXCQW96F7R*MTczNjMyMzg4NC4xLjEuMTczNjMyMzg4OC4wLjAuMA..).
+> * As for storing data, **PostgreSQL** is used along with **Redis**.
+>  * The application uses PostgreSQL to store general app & user data.
+>  * PostgreSQL is also used for managing the queue systems and its jobs.
+>  * Redis is used as a solution for caching.
+> * All coin data are fetched from [**CoinAPI.io**](https://www.coinapi.io/?_gl=1*1g124kb*_ga*MTIzMjgzMDMxMy4xNzM2MzIzODg1*_ga_EXCQW96F7R*MTczNjMyMzg4NC4xLjEuMTczNjMyMzg4OC4wLjAuMA..).
 
 ## Core functionalities
 
 ### Overview
 
 The application offers basic functionalities to trade cryptocurrency:
-* Display coin price data
-* Create multiple account-based portfolios
-* Add custom amounts of cryptocurrencies to portfolios by purchasing them
-* Create price observation to coins
-  * Set a target price for a coin, and get an email notification when the price is reached
+> * Display coin price data
+> * Create multiple account-based portfolios
+> * Add custom amounts of cryptocurrencies to portfolios by purchasing them
+> * Create price observation to coins
+>   * Set a target price for a coin, and get an email notification when the price is reached
 
 ### Displaying coin price data
 
@@ -60,3 +62,20 @@ then returned in a paginated form.
 
 Users may create **portfolios** in which they can keep their purchased coins. A user can have multiple portfolios.  
 Upon deleting a portfolio, all coins held in it will also get sold (deleted) as well. 
+
+### Purchasing cryptocurrencies
+
+Users may buy cryptocurrencies by clicking on the **Buy** button at the **Assets/Index** page.  
+Here, instead of getting the single asset from the database, the coin data is fetched from the API to be able to show the real-time price.  
+When displaying a cryptocurrency at the buying page, a standard conversion rate is show between the **chosen cryptocurrency** and a **United States Dollar**.  
+Here, the user either has to choose the **amount of coin** to purchase, or the **value of money** that they want to spend on the coin. 
+Then, the user has to select the portfolio that they want to place the asset in. In the case of not having a portfolio,
+instead of redirecting to the **Buy** page, the user gets automatically taken to the **Portfolio creation** page.
+
+### Creating price observations
+
+Users may create price observations on coins by clicking on the **Notify me** button at the **Assets/Index** page.  
+Here, just like when buying coins, the single coin data gets fetched from the API.  
+Users may set a **target price** for when they wish to be notified about a coin's price change.
+When a coin reaches the target price, an email gets sent to the user. Then, the price observation **becomes inactive**,
+which the user can later delete, if they wish to.
