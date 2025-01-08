@@ -74,35 +74,32 @@ watch(searchValue, (newValue) => {
                     <td v-if="asset.price_usd">${{ asset.price_usd }}</td>
                     <td v-else>No price data</td>
                     <td>
-                        <button
+                        <Link
                             class="rounded bg-gray-100 p-2 hover:bg-black hover:text-white"
                             v-if="asset.price_usd != null"
-                            @click="
-                                router.visit(route('entry.create'), {
-                                    method: 'get',
-                                    data: {
-                                        assetId: asset.asset_id,
-                                    },
+                            :href="
+                                route('entry.create', {
+                                    assetId: asset.asset_id,
                                 })
                             "
+                            prefetch
                         >
                             Buy
-                        </button>
+                        </Link>
                     </td>
                     <td>
-                        <button
+                        <Link
                             class="rounded bg-gray-100 p-2 hover:bg-black hover:text-white"
                             v-if="asset.price_usd != null"
-                            @click="
-                                router.get(
-                                    route('observation.create', {
-                                        asset: asset.asset_id,
-                                    }),
-                                )
+                            :href="
+                                route('observation.create', {
+                                    asset: asset.asset_id,
+                                })
                             "
+                            prefetch
                         >
                             Notify me
-                        </button>
+                        </Link>
                     </td>
                 </tr>
             </tbody>
