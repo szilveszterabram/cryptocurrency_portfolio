@@ -25,10 +25,8 @@ class PortfolioController extends Controller
 
     public function index(): Response
     {
-        $portfolios = $this->portfolioService->getUserPortfolios();
-
         return Inertia::render('Portfolio/Index', [
-            'portfolios' => $portfolios,
+            'portfolios' => $this->portfolioService->getUserPortfolios(),
         ]);
     }
 
@@ -53,12 +51,11 @@ class PortfolioController extends Controller
     public function show(Portfolio $portfolio): Response
     {
         $entries = $this->portfolioService->getEntries($portfolio);
-        $assets = $this->assetService->getAssetsForEntries($entries);
 
         return Inertia::render('Portfolio/Show', [
             'portfolio' => $portfolio,
             'entries' => $entries,
-            'data' => $assets,
+            'data' => $this->assetService->getAssetsForEntries($entries),
         ]);
     }
 

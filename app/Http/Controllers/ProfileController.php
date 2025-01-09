@@ -24,10 +24,8 @@ class ProfileController extends Controller
 
     public function edit(Request $request): Response
     {
-        $balance = $this->profileService->getUserBalance();
-
         return Inertia::render('Profile/Edit', [
-            'current_balance' => $balance,
+            'current_balance' => $this->profileService->getUserBalance(),
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
         ]);

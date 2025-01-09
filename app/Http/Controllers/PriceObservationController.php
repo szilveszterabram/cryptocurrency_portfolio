@@ -24,21 +24,17 @@ class PriceObservationController extends Controller
     public function index(): Response
     {
         $observations = $this->priceObservationService->getAll();
-        $observations = $this->priceObservationService->appendAssetIconsForObservations($observations);
 
         return Inertia::render('PriceObservation/Index', [
-            'observations' => $observations,
+            'observations' => $this->priceObservationService->appendAssetIconsForObservations($observations),
         ]);
     }
 
     public function create(Request $request): Response
     {
-        $asset = $this->coinFetchService->fetchAssetById($request->asset);
-        $dbAsset = $this->assetService->getAssetByAssetId($request->asset);
-
         return Inertia::render('PriceObservation/Create', [
-            'asset' => $asset,
-            'icon_url' => $dbAsset['icon_url'],
+            'asset' => $this->coinFetchService->fetchAssetById($request->asset),
+            'icon_url' => $this->assetService->getAssetByAssetId($request->asset)['icon_url'],
         ]);
     }
 
