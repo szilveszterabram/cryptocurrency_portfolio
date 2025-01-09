@@ -15,10 +15,22 @@ class ProfileService
         return $authenticatedUser->balance;
     }
 
-    public function updateUserBalance(float $amount): void
+    public function addToUserBalance(float $amount): void
     {
         $authenticatedUser = $this->user->getAuthenticatedUser();
         $newBalance = $authenticatedUser->balance + $amount;
         $authenticatedUser->update(['balance' => $newBalance]);
+    }
+
+    public function substractFromUserBalance(float $amount): bool
+    {
+        $authenticatedUser = $this->user->getAuthenticatedUser();
+        if ($amount > $authenticatedUser->balance) {
+            return false;
+        }
+
+        $newBalance = $authenticatedUser->balance - $amount;
+        $authenticatedUser->update(['balance' => $newBalance]);
+        return true;
     }
 }

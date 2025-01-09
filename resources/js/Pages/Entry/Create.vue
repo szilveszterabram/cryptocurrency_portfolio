@@ -87,6 +87,12 @@ const buy = () => {
                 Price of 1 USD: {{ asset.asset_id }}{{ 1 / asset.price_usd }}
             </p>
 
+            <div v-if="form.errors" class="mb-4 text-red-600">
+                <p v-for="(error, field) in form.errors" :key="field">
+                    {{ error }}
+                </p>
+            </div>
+
             <TextInput
                 name="USD amount"
                 :model-value="buy_form.buy_price"

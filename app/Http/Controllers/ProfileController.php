@@ -49,7 +49,7 @@ class ProfileController extends Controller
     public function updateBalance(Request $request): void
     {
         $validated = $this->validationService->validateBalanceAddition($request);
-        $this->profileService->updateUserBalance($validated['balance']);
+        $this->profileService->addToUserBalance($validated['balance']);
     }
 
     public function destroy(Request $request): RedirectResponse

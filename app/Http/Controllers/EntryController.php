@@ -6,6 +6,7 @@ use App\Services\AssetService;
 use App\Services\CoinFetchService;
 use App\Services\EntryService;
 use App\Services\PortfolioService;
+use App\Services\ProfileService;
 use App\Services\ValidationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class EntryController extends Controller
         protected ValidationService $validationService,
         protected EntryService $entryService,
         protected AssetService $assetService,
+        protected ProfileService $profileService,
     ) {}
 
     public function create(Request $request): Response
@@ -44,9 +46,15 @@ class EntryController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $this->validationService->validateEntry($request);
+        if (!$this->validationService->hasEnoughFundsToBuy($validated['amount'] * $validated['price_at_buy'])) {
+            return back()->withErrors([
+                'You do not have enough funds to buy this asset. Please lower the amount or add more funds to your account.',
+            ]);
+        }
 
         $portfolio = $this->portfolioService->getById($validated['portfolio_id']);
         $this->entryService->create($portfolio, $validated);
+        $this->profileService->substractFromUserBalance($validated['amount'] * $validated['price_at_buy']);
 
         return redirect('portfolio');
     }

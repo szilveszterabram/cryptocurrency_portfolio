@@ -3,11 +3,15 @@
 namespace App\Services;
 
 use App\Models\Portfolio;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ValidationService
 {
-    public function __construct(protected Portfolio $portfolio) {}
+    public function __construct(
+        protected Portfolio $portfolio,
+        protected User $user,
+    ) {}
 
     public function validateEntry(Request $request): array
     {
@@ -18,6 +22,12 @@ class ValidationService
             'amount' => 'required|numeric|gt:0',
             'price_at_buy' => 'required|numeric',
         ]);
+    }
+
+    public function hasEnoughFundsToBuy(float $price): bool
+    {
+        $user = $this->user->getAuthenticatedUser();
+        return $user->balance >= $price;
     }
 
     public function validatePortfolio(Request $request): array
