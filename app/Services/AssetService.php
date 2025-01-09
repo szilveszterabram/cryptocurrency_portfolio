@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Asset;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class AssetService
 {

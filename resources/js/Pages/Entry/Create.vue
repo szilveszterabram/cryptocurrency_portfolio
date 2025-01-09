@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Notification from '@/Components/Notification.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
@@ -18,6 +19,7 @@ const properties = defineProps<{
         id: number;
         name: string;
     }>;
+    balance: number;
 }>();
 
 const form = useForm({
@@ -63,6 +65,12 @@ const buy = () => {
 <template>
     <Head :title="'Buy ' + asset.asset_id" />
 
+    <Notification
+        v-if="$page.props.errors"
+        type="error"
+        :message="Object.values($page.props.errors)[0]"
+    />
+
     <div class="mt-4 flex h-3/4 flex-col items-center justify-start">
         <div
             class="flex items-center justify-start rounded bg-black p-2 text-white shadow"
@@ -80,18 +88,14 @@ const buy = () => {
         <div
             class="mt-2 flex h-full w-full flex-col items-start rounded border-2 border-gray-50 bg-white p-6 shadow-sm"
         >
+            <h2 class="mb-4">Available balance: ${{ balance }}</h2>
+
             <p class="mb-4 text-lg">
                 Price of 1 {{ asset.name }}: ${{ asset.price_usd }}
             </p>
             <p class="mb-4 text-lg">
                 Price of 1 USD: {{ asset.asset_id }}{{ 1 / asset.price_usd }}
             </p>
-
-            <div v-if="form.errors" class="mb-4 text-red-600">
-                <p v-for="(error, field) in form.errors" :key="field">
-                    {{ error }}
-                </p>
-            </div>
 
             <TextInput
                 name="USD amount"

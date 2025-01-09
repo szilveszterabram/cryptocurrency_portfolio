@@ -35,8 +35,10 @@ class EntryController extends Controller
         $portfolios = $this->portfolioService->getUserPortfolios();
         $asset = $this->coinFetchService->fetchAssetById($assetId);
         $dbAsset = $this->assetService->getAssetByAssetId($assetId);
+        $balance = $this->profileService->getUserBalance();
 
         return Inertia::render('Entry/Create', [
+            'balance' => $balance,
             'asset' => $asset,
             'icon_url' => $dbAsset['icon_url'],
             'portfolios' => $portfolios,

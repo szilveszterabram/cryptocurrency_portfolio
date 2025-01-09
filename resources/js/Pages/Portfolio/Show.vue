@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Notification from '@/Components/Notification.vue';
 import { router } from '@inertiajs/vue3';
 import { CircleDollarSign, HandCoins } from 'lucide-vue-next';
 import moment from 'moment';
@@ -48,6 +49,12 @@ const entriesWithIcons = computed(() => {
 
 <template>
     <Head :title="portfolio.name" />
+
+    <Notification
+        v-if="$page.props.success"
+        type="success"
+        :message="$page.props.success as string"
+    />
 
     <div class="flex h-full w-full items-start justify-center">
         <table class="mt-14 w-full" v-if="entries.length != 0">
@@ -128,6 +135,11 @@ const entriesWithIcons = computed(() => {
                                     route('entry.destroy', {
                                         entry: entry.id,
                                     }),
+                                    {
+                                        onSuccess: () => {
+                                            router.flushAll();
+                                        },
+                                    },
                                 )
                             "
                         />
