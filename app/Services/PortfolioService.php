@@ -6,7 +6,6 @@ use App\Models\Portfolio;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;

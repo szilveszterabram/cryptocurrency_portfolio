@@ -35,4 +35,11 @@ class ValidationService
             'asset_id' => 'required',
         ]);
     }
+
+    public function validateBalanceAddition(Request $request): array
+    {
+        return $request->validate([
+            'balance' => 'required|numeric|gt:0',
+        ]);
+    }
 }

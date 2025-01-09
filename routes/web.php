@@ -3,6 +3,7 @@
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\PriceObservationController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\PortfolioController;
 
@@ -16,13 +17,14 @@ Route::inertia('/verify-email', 'Auth/VerifyEmail');
 Route::middleware('auth')->group(function () {
     Route::inertia('/', 'Welcome')
         ->name('welcome');
-    Route::inertia('/profile', 'Profile/Edit')
-        ->name('profile');
     Route::inertia('/assets', 'Asset/Index')
         ->name('assets');
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
+    Route::put('/profile/add-balance', [ProfileController::class, 'updateBalance'])->name('profile.update-balance');
+
     Route::get('/assets', [AssetController::class, 'index'])->name('assets');
 
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');
