@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <div class="flex h-full w-full bg-gray-50">
+    <div class="flex min-h-screen w-full bg-gray-50">
         <header class="fixed h-12 w-full bg-black text-white">
             <nav
                 class="mx-auto flex max-w-screen-lg items-center justify-between p-2"
@@ -40,7 +40,7 @@ import { Link } from '@inertiajs/vue3';
                 </div>
             </nav>
         </header>
-        <main class="mb-5 mt-14 h-full w-full bg-gray-50">
+        <main class="mb-5 mt-14 min-h-screen w-full bg-gray-50">
             <slot />
         </main>
     </div>

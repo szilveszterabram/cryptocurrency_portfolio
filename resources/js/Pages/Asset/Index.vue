@@ -38,12 +38,12 @@ watch(searchValue, (newValue) => {
 </script>
 
 <template>
-    <div class="flex h-full w-full flex-col">
+    <div class="flex min-h-screen w-full flex-col">
         <TextInput
             name="search"
             type="text"
             :model-value="searchValue"
-            placeholder="Type an in short form (Ex.: BTC)"
+            placeholder="Type an asset in short form (Ex.: BTC)"
             @input="searchValue = $event.target.value"
         />
         <table>
