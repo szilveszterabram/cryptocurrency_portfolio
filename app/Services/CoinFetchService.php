@@ -73,19 +73,24 @@ class CoinFetchService
 
     public function update(array $data): void
     {
-        foreach ($data as $asset) {
-            Asset::updateOrCreate(
-                [
+        $chunkSize = 1000;
+
+        collect($data)->chunk($chunkSize)->each(function ($chunk) {
+            $assets = $chunk->map(function ($asset) {
+                return [
                     'asset_id' => $asset['asset_id'],
-                ],
-                [
-                    'asset_id' => $asset['asset_id'],
-                    'name' => array_key_exists('name', $asset) ? $asset['name'] : "",
-                    'price_usd' => array_key_exists('price_usd', $asset) ? $asset['price_usd'] : -1,
-                    'type_is_crypto' => $asset['type_is_crypto'],
-                ]
+                    'name' => $asset['name'] ?? "",
+                    'price_usd' => $asset['price_usd'] ?? -1,
+                    'type_is_crypto' => $asset['type_is_crypto'] ?? 0,
+                ];
+            })->toArray();
+
+            Asset::upsert(
+                $assets,
+                ['asset_id'],
+                ['name', 'price_usd', 'type_is_crypto']
             );
-        }
+        });
     }
 
     public function updateIcons(array $data): void
