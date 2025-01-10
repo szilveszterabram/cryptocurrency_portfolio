@@ -48,12 +48,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-    public function getAuthenticatedUser(): AuthenticatableUser
-    {
-        return Auth::user();
-    }
-
+    
     public function portfolios(): HasMany
     {
         return $this->hasMany(Portfolio::class);

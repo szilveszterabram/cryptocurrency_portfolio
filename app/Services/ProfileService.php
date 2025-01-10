@@ -11,7 +11,7 @@ class ProfileService
 
     public function getUserBalance()
     {
-        $authenticatedUser = $this->user->getAuthenticatedUser();
+        $authenticatedUser = auth()->user();
         return $authenticatedUser->balance;
     }
 

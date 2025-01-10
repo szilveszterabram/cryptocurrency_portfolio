@@ -4,9 +4,9 @@ namespace App\Listeners;
 
 use App\Events\AssetUpdated;
 use App\Mail\PriceTargetReachedMail;
+use App\Models\User;
 use App\Services\CoinFetchService;
 use App\Services\PriceObservationService;
-use App\Services\UserService;
 use Illuminate\Support\Facades\Mail;
 
 class MaybeNotify
@@ -14,7 +14,6 @@ class MaybeNotify
     public function __construct(
         protected PriceObservationService $priceObservationService,
         protected CoinFetchService $coinFetchService,
-        protected UserService $userService,
     ) {}
 
     public function handle(AssetUpdated $event): void
@@ -34,7 +33,7 @@ class MaybeNotify
                 'active' => false,
             ]);
 
-            $user = $this->userService->getById($observation['user_id']);
+            $user = User::findOrFail($observation['user_id']);
             Mail::to($user)->queue(new PriceTargetReachedMail($user, $observation, $asset));
         }
     }

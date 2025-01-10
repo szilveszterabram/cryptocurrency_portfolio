@@ -11,12 +11,11 @@ class PriceObservationService
     public function __construct(
         protected PriceObservation $priceObservation,
         protected AssetService $assetService,
-        protected User $user,
     ) {}
 
     public function getAll(): Collection
     {
-        $user = $this->user->getAuthenticatedUser();
+        $user = auth()->user();
         return $user->priceObservations()->get();
     }
 
@@ -27,7 +26,7 @@ class PriceObservationService
 
     public function create(array $data): void
     {
-        $user = $this->user->getAuthenticatedUser();
+        $user = auth()->user();
         $user->priceObservations()->create([
             'asset_id' => $data['asset_id'],
             'target' => $data['target'],
@@ -48,7 +47,7 @@ class PriceObservationService
 
     public function destroy(int $id): void
     {
-        $user = $this->user->getAuthenticatedUser();
+        $user = auth()->user();
         $user->priceObservations()->findOrFail($id)->delete();
     }
 }
