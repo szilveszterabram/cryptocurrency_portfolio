@@ -25,13 +25,24 @@ class AssetService
     public function getAssetsForEntries(Entry|Collection $entries): Collection
     {
         $res = new Collection();
+
+        $entries = $entries instanceof Entry ? [$entries] : $entries;
+
         foreach ($entries as $entry) {
-            $dbAsset = Asset::where('asset_id', $entry['asset_short'])->first();
-            $asset = $this->coinFetchService->fetchAssetById($entry['asset_short']);
-            $asset['icon_url'] = $dbAsset->icon_url;
+            $asset = $this->getAssetData($entry['asset_short']);
             $res->push($asset);
         }
+
         return $res;
+    }
+
+    private function getAssetData(string $assetShort): array
+    {
+        $dbAsset = Asset::where('asset_id', $assetShort)->first();
+        $asset = $this->coinFetchService->fetchAssetById($assetShort);
+        $asset['icon_url'] = $dbAsset->icon_url;
+
+        return $asset;
     }
 
     public function getAssetByAssetId(string $assetId): Asset
