@@ -35,7 +35,7 @@ class PortfolioService
 
     public function create(array $data): Portfolio
     {
-        return $this->portfolio->create($this->user->getAuthenticatedUser(), $data);
+        return $this->portfolio->create(auth()->user(), $data);
     }
 
     public function update(Portfolio $portfolio, array $data): Portfolio
@@ -46,13 +46,13 @@ class PortfolioService
 
     public function getById(int $portfolioId): Portfolio
     {
-        $user = $this->user->getAuthenticatedUser();
+        $user = auth()->user();
         return $user->portfolios()->findOrFail($portfolioId);
     }
 
     public function getUserPortfolios(): Collection
     {
-        $user = $this->user->getAuthenticatedUser();
+        $user = auth()->user();
         return $user->portfolios()->get();
     }
 
@@ -75,7 +75,7 @@ class PortfolioService
 
     public function destroy(string $portfolio): void
     {
-        $user = $this->user->getAuthenticatedUser();
+        $user = auth()->user();
         $portfolio = $user->portfolios()->findOrFail($portfolio);
         $portfolio->delete();
     }

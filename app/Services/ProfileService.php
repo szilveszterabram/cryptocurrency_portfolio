@@ -17,14 +17,14 @@ class ProfileService
 
     public function addToUserBalance(float $amount): void
     {
-        $authenticatedUser = $this->user->getAuthenticatedUser();
+        $authenticatedUser = auth()->user();
         $newBalance = $authenticatedUser->balance + $amount;
         $authenticatedUser->update(['balance' => $newBalance]);
     }
 
     public function substractFromUserBalance(float $amount): bool
     {
-        $authenticatedUser = $this->user->getAuthenticatedUser();
+        $authenticatedUser = auth()->user();
         if ($amount > $authenticatedUser->balance) {
             return false;
         }

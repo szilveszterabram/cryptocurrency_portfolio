@@ -12,19 +12,19 @@ import { Link } from '@inertiajs/vue3';
                     v-if="$page.props.auth.user"
                     class="flex w-full justify-evenly space-x-6 self-start text-xl"
                 >
-                    <Link prefetch cache-for="1m" :href="route('welcome')"
+                    <Link prefetch cache-for="10s" :href="route('welcome')"
                         >Home</Link
                     >
-                    <Link prefetch cache-for="1m" :href="route('assets')"
+                    <Link prefetch cache-for="10s" :href="route('assets')"
                         >Assets</Link
                     >
-                    <Link prefetch cache-for="1m" :href="route('portfolio')"
+                    <Link prefetch cache-for="10s" :href="route('portfolio')"
                         >My Portfolios</Link
                     >
-                    <Link prefetch cache-for="1m" :href="route('observation')"
+                    <Link prefetch cache-for="10s" :href="route('observation')"
                         >My Observations</Link
                     >
-                    <Link prefetch cache-for="1m" :href="route('profile')">{{
+                    <Link prefetch cache-for="10s" :href="route('profile')">{{
                         $page.props.auth.user.name
                     }}</Link>
                     <Link :href="route('logout')" as="button" method="post"
