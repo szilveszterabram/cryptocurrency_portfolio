@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Asset;
+use App\Models\Entry;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -21,7 +22,7 @@ class AssetService
             ->paginate();
     }
 
-    public function getAssetsForEntries(Collection $entries): Collection
+    public function getAssetsForEntries(Entry|Collection $entries): Collection
     {
         $res = new Collection();
         foreach ($entries as $entry) {

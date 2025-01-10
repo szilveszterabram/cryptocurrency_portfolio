@@ -24,7 +24,7 @@ class EntryService
     public function destroy(string $entry): RedirectResponse
     {
         $dbEntry = Entry::findOrFail($entry);
-        $asset = $this->assetService->getAssetsForEntries(collect([$dbEntry]))[0];
+        $asset = $this->assetService->getAssetsForEntries($dbEntry)[0];
         $this->profileService->addToUserBalance($dbEntry->amount * $asset['price_usd']);
         $dbEntry->delete();
 
