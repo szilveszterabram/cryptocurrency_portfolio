@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePriceObservationRequest;
 use App\Services\AssetService;
 use App\Services\CoinFetchService;
 use App\Services\PriceObservationService;
@@ -38,12 +39,12 @@ class PriceObservationController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(CreatePriceObservationRequest $request): RedirectResponse
     {
-        $validated = $this->validationService->validatePriceObservation($request);
+        $validated = $request->validated();
         $this->priceObservationService->create($validated);
 
-        return redirect('/observations');
+        return redirect()->route('observation');
     }
 
     public function destroy(Request $request): void
