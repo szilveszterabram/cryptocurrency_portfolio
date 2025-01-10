@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePortfolioRequest;
 use App\Models\Portfolio;
 use App\Services\AssetService;
 use App\Services\CoinFetchService;
 use App\Services\PortfolioService;
-use App\Services\ValidationService;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,7 +15,6 @@ class PortfolioController extends Controller
 {
     public function __construct(
         protected PortfolioService $portfolioService,
-        protected ValidationService $validationService,
         protected CoinfetchService $coinFetchService,
         protected AssetService $assetService,
     ) {}
@@ -35,9 +31,9 @@ class PortfolioController extends Controller
         return Inertia::render('Portfolio/Create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(CreatePortfolioRequest $request): RedirectResponse
     {
-        $validated = $this->validationService->validatePortfolio($request);
+        $validated = $request->validated();
 
         $this->portfolioService->create($validated);
 
@@ -45,7 +41,7 @@ class PortfolioController extends Controller
             return $this->portfolioService->redirectToEntryCreate();
         }
 
-        return redirect(route('portfolio'));
+        return redirect()->route('portfolio')->with('success', 'Your portfolio has been created successfully.');
     }
 
     public function show(Portfolio $portfolio): Response
@@ -66,12 +62,12 @@ class PortfolioController extends Controller
         ]);
     }
 
-    public function update(Request $request, Portfolio $portfolio): RedirectResponse
+    public function update(CreatePortfolioRequest $request, Portfolio $portfolio): RedirectResponse
     {
-        $validated = $this->validationService->validatePortfolio($request);
+        $validated = $request->validated();
         $this->portfolioService->update($portfolio, $validated);
 
-        return redirect('/portfolio');
+        return redirect()->route('portfolio')->with('success', 'Your portfolio has been updated successfully.');
     }
 
     public function destroy($portfolio): void

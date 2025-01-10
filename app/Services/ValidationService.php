@@ -13,13 +13,6 @@ class ValidationService
         protected User $user,
     ) {}
 
-    public function validatePortfolio(Request $request): array
-    {
-        return $request->validate([
-            'name' => 'required|string|max:255'
-        ]);
-    }
-
     public function validatePriceObservation(Request $request): array
     {
         return $request->validate([
