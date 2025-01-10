@@ -13,23 +13,6 @@ class ValidationService
         protected User $user,
     ) {}
 
-    public function validateEntry(Request $request): array
-    {
-        return $request->validate([
-            'portfolio_id' => 'required',
-            'asset_short' => 'required|string',
-            'asset_long' => 'required|string',
-            'amount' => 'required|numeric|gt:0',
-            'price_at_buy' => 'required|numeric',
-        ]);
-    }
-
-    public function hasEnoughFundsToBuy(float $price): bool
-    {
-        $user = $this->user->getAuthenticatedUser();
-        return $user->balance >= $price;
-    }
-
     public function validatePortfolio(Request $request): array
     {
         return $request->validate([
