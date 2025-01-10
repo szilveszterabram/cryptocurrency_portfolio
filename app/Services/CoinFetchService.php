@@ -95,15 +95,21 @@ class CoinFetchService
 
     public function updateIcons(array $data): void
     {
-        foreach ($data as $icon) {
-            $asset = Asset::where('asset_id', $icon['asset_id'])->first();
-            if ($asset) {
-                $asset->update(
-                    [
-                        'icon_url' => $icon['url'],
-                    ],
-                );
-            }
-        }
+        $chunkSize = 1000;
+
+        collect($data)->chunk($chunkSize)->each(function ($chunk) {
+            $icons = $chunk->map(function ($icon) {
+                return [
+                    'asset_id' => $icon['asset_id'],
+                    'icon_url' => $icon['url'],
+                ];
+            })->toArray();
+
+            Asset::upsert(
+                $icons,
+                ['asset_id'],
+                ['icon_url']
+            );
+        });
     }
 }
