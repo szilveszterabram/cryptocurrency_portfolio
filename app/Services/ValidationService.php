@@ -13,15 +13,6 @@ class ValidationService
         protected User $user,
     ) {}
 
-    public function validatePriceObservation(Request $request): array
-    {
-        return $request->validate([
-            'target' => 'required|numeric|gt:0',
-            'active' => 'required|boolean',
-            'asset_id' => 'required',
-        ]);
-    }
-
     public function validateBalanceAddition(Request $request): array
     {
         return $request->validate([

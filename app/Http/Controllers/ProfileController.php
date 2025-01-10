@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\UpdateUserBalanceRequest;
 use App\Services\ProfileService;
-use App\Services\UserService;
-use App\Services\ValidationService;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,7 +17,6 @@ class ProfileController extends Controller
 {
     public function __construct(
         protected ProfileService $profileService,
-        protected ValidationService $validationService,
     ) {}
 
     public function edit(Request $request): Response
@@ -44,10 +41,12 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit');
     }
 
-    public function updateBalance(Request $request): void
+    public function updateBalance(UpdateUserBalanceRequest $request): void
     {
-        $validated = $this->validationService->validateBalanceAddition($request);
+        $validated = $request->validated();
         $this->profileService->addToUserBalance($validated['balance']);
+
+        back()->with('success', 'Funds have been added to your balance.');
     }
 
     public function destroy(Request $request): RedirectResponse

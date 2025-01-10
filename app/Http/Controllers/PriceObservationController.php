@@ -6,18 +6,15 @@ use App\Http\Requests\CreatePriceObservationRequest;
 use App\Services\AssetService;
 use App\Services\CoinFetchService;
 use App\Services\PriceObservationService;
-use App\Services\ValidationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use function Pest\Laravel\get;
 
 class PriceObservationController extends Controller
 {
     public function __construct(
         protected PriceObservationService $priceObservationService,
-        protected ValidationService $validationService,
         protected CoinFetchService $coinFetchService,
         protected AssetService $assetService,
     ) {}
