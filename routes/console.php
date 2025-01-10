@@ -16,5 +16,5 @@ Artisan::command('logs:clear', function() {
     $this->comment('Logs have been cleared!');
 })->describe('Clear log files');
 
-Schedule::job(FetchAssetsJob::class)->everyTenMinutes();
-Schedule::job(FetchAssetIconsJob::class)->everyTenMinutes();
+Schedule::job(FetchAssetsJob::class)->everyThreeMinutes();
+Schedule::job(FetchAssetIconsJob::class)->everyThreeMinutes();
