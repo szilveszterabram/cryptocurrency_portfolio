@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateEntryRequest;
+use App\Models\Entry;
 use App\Services\AssetService;
 use App\Services\CoinFetchService;
 use App\Services\EntryService;
@@ -50,8 +51,8 @@ class EntryController extends Controller
         return redirect()->route('portfolio.show', $portfolio);
     }
 
-    public function destroy(string $entry): RedirectResponse
+    public function destroy(Entry $entry): RedirectResponse
     {
-        return $this->entryService->destroy($entry);
+        return $this->entryService->destroy($entry->id);
     }
 }

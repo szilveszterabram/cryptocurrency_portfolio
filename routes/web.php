@@ -4,6 +4,7 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\PriceObservationController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Entry;
 use App\Models\Portfolio;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortfolioController;
@@ -16,17 +17,14 @@ Route::inertia('/forgot-password', 'Auth/ForgotPassword');
 Route::inertia('/verify-email', 'Auth/VerifyEmail');
 
 Route::middleware('auth')->group(function () {
-    Route::inertia('/', 'Welcome')
-        ->name('welcome');
-    Route::inertia('/assets', 'Asset/Index')
-        ->name('assets');
+    Route::inertia('/', 'Welcome')->name('welcome')->middleware('permission:navigate to welcome');
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::put('/profile/add-balance', [ProfileController::class, 'updateBalance'])->name('profile.update-balance');
 
-    Route::get('/assets', [AssetController::class, 'index'])->name('assets');
+    Route::get('/assets', [AssetController::class, 'index'])->name('assets')->middleware('permission:navigate to assets');
 
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create')->can('create', Portfolio::class);
@@ -36,9 +34,9 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/portfolio/{portfolio}', [PortfolioController::class, 'update'])->name('portfolio.update')->can('update', 'portfolio');
     Route::delete('/portfolio/{portfolio}', [PortfolioController::class, 'destroy'])->name('portfolio.destroy')->can('delete', 'portfolio');
 
-    Route::get('/entry/create', [EntryController::class, 'create'])->name('entry.create');
-    Route::post('/entry/store', [EntryController::class, 'store'])->name('entry.store');
-    Route::delete('/entry/{entry}', [EntryController::class, 'destroy'])->name('entry.destroy');
+    Route::get('/entry/create', [EntryController::class, 'create'])->name('entry.create')->can('create', Entry::class);
+    Route::post('/entry/store', [EntryController::class, 'store'])->name('entry.store')->can('create', Entry::class);
+    Route::delete('/entry/{entry}', [EntryController::class, 'destroy'])->name('entry.destroy')->can('delete', 'entry');
 
     Route::get('/observations', [PriceObservationController::class, 'index'])->name('observation');
     Route::get('/observation/{asset}', [PriceObservationController::class, 'create'])->name('observation.create');
