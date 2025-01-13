@@ -70,8 +70,8 @@ class PortfolioController extends Controller
         return redirect()->route('portfolio')->with('success', 'Your portfolio has been updated successfully.');
     }
 
-    public function destroy($portfolio): void
+    public function destroy(Portfolio $portfolio): void
     {
-        $this->portfolioService->destroy($portfolio);
+        $this->portfolioService->destroy($portfolio->id);
     }
 }
