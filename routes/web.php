@@ -6,6 +6,7 @@ use App\Http\Controllers\PriceObservationController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Entry;
 use App\Models\Portfolio;
+use App\Models\PriceObservation;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortfolioController;
 
@@ -38,10 +39,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/entry/store', [EntryController::class, 'store'])->name('entry.store')->can('create', Entry::class);
     Route::delete('/entry/{entry}', [EntryController::class, 'destroy'])->name('entry.destroy')->can('delete', 'entry');
 
-    Route::get('/observations', [PriceObservationController::class, 'index'])->name('observation');
-    Route::get('/observation/{asset}', [PriceObservationController::class, 'create'])->name('observation.create');
-    Route::post('/observation', [PriceObservationController::class, 'store'])->name('observation.store');
-    Route::delete('/observation/{observation}', [PriceObservationController::class, 'destroy'])->name('observation.destroy');
+    Route::get('/observations', [PriceObservationController::class, 'index'])->name('observation')->can('view', PriceObservation::class);
+    Route::get('/observation/{asset}', [PriceObservationController::class, 'create'])->name('observation.create')->can('create', PriceObservation::class);
+    Route::post('/observation', [PriceObservationController::class, 'store'])->name('observation.store')->can('create', PriceObservation::class);
+    Route::delete('/observation/{priceObservation}', [PriceObservationController::class, 'destroy'])->name('observation.destroy')->can('delete', 'priceObservation');
 });
 
 require __DIR__.'/auth.php';

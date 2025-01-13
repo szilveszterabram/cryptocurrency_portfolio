@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePriceObservationRequest;
+use App\Models\PriceObservation;
 use App\Services\AssetService;
 use App\Services\CoinFetchService;
 use App\Services\PriceObservationService;
@@ -44,8 +45,8 @@ class PriceObservationController extends Controller
         return redirect()->route('observation');
     }
 
-    public function destroy(Request $request): void
+    public function destroy(PriceObservation $priceObservation): void
     {
-        $this->priceObservationService->destroy($request->observation);
+        $this->priceObservationService->destroy((int)$priceObservation->id);
     }
 }
