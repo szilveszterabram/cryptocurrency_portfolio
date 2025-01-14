@@ -18,12 +18,16 @@ Route::inertia('/reset-password', 'Auth/ResetPassword');
 Route::inertia('/forgot-password', 'Auth/ForgotPassword');
 Route::inertia('/verify-email', 'Auth/VerifyEmail');
 
-Route::get('/admin', [AdminController::class, 'index'])->name('admin');
-
 Route::inertia('/', 'Welcome')->name('welcome');
 Route::get('/assets', [AssetController::class, 'index'])->name('assets');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+    Route::get('/admin/{user}', [AdminController::class, 'show'])->name('admin.show');
+    Route::post('/admin/{user}/make-admin', [AdminController::class, 'makeAdmin'])->name('admin.make-admin');
+    Route::patch('/admin/{user}/update', [AdminController::class, 'update'])->name('admin.update');
+    Route::delete('admin/{user}/delete', [AdminController::class, 'destroy'])->name('admin.delete');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::put('/profile/add-balance', [ProfileController::class, 'updateBalance'])->name('profile.update-balance');
 

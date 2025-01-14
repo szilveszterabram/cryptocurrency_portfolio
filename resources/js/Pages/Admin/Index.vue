@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { router } from '@inertiajs/vue3';
+import { Eye } from 'lucide-vue-next';
+
 const props = defineProps<{
     users: {
         current_page: number;
@@ -32,29 +35,49 @@ const capitalizeFirstLetter = (inp: string) => {
     <Head title="Admin" />
 
     <div class="flex items-center justify-center">
-        <table class="mt-3">
+        <table class="mt-3 border-spacing-x-2">
             <thead>
                 Users
             </thead>
             <tbody>
-                <tr class="bg-black text-white hover:bg-black hover:text-white">
-                    <td>Id</td>
-                    <td>Name</td>
-                    <td>Email</td>
-                    <td>Balance</td>
-                    <td>Roles</td>
+                <tr
+                    class="bg-black p-2 text-white hover:bg-black hover:text-white"
+                >
+                    <th class="rounded-tl p-2">Id</th>
+                    <th class="p-2">Name</th>
+                    <th class="p-2">Email</th>
+                    <th class="p-2">Balance</th>
+                    <th class="p-2">Roles</th>
+                    <th class="rounded-tr p-2">See</th>
                 </tr>
-                <tr v-for="user in props.users.data" :key="user.id">
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>${{ user.balance }}</td>
-                    <td>
+                <tr
+                    v-for="user in props.users.data"
+                    :key="user.id"
+                    class="bg-gray-100 hover:bg-gray-200"
+                >
+                    <td class="p-2">{{ user.id }}</td>
+                    <td class="p-2">{{ user.name }}</td>
+                    <td class="p-2">{{ user.email }}</td>
+                    <td class="p-2">${{ user.balance }}</td>
+                    <td class="p-2">
                         {{
                             user.roles
                                 .map((role) => capitalizeFirstLetter(role.name))
                                 .join(', ')
                         }}
+                    </td>
+                    <td class="p-2">
+                        <Eye
+                            class="rounded bg-gray-300 p-2 hover:cursor-pointer hover:bg-gray-500 hover:text-white"
+                            :size="38"
+                            @click="
+                                router.get(
+                                    route('admin.show', {
+                                        user: user.id,
+                                    }),
+                                )
+                            "
+                        />
                     </td>
                 </tr>
             </tbody>

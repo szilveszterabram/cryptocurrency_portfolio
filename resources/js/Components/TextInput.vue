@@ -7,7 +7,6 @@ const model = defineModel({
 defineProps({
     name: {
         type: String,
-        required: true,
     },
     type: {
         type: String,
