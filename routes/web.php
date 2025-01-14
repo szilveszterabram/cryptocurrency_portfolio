@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\PriceObservationController;
@@ -17,15 +18,14 @@ Route::inertia('/reset-password', 'Auth/ResetPassword');
 Route::inertia('/forgot-password', 'Auth/ForgotPassword');
 Route::inertia('/verify-email', 'Auth/VerifyEmail');
 
-Route::middleware('auth')->group(function () {
-    Route::inertia('/', 'Welcome')->name('welcome')->middleware('permission:navigate to welcome');
-});
+Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+
+Route::inertia('/', 'Welcome')->name('welcome');
+Route::get('/assets', [AssetController::class, 'index'])->name('assets');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::put('/profile/add-balance', [ProfileController::class, 'updateBalance'])->name('profile.update-balance');
-
-    Route::get('/assets', [AssetController::class, 'index'])->name('assets')->middleware('permission:navigate to assets');
 
     Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');
     Route::get('/portfolio/create', [PortfolioController::class, 'create'])->name('portfolio.create')->can('create', Portfolio::class);

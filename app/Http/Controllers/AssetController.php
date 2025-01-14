@@ -18,6 +18,7 @@ class AssetController extends Controller
 
         return Inertia::render('Asset/Index', [
             'assets' => Inertia::merge($assets->toArray()),
+            'roles' => auth()->user() ? auth()->user()->getRoleNames() : [],
         ]);
     }
 }

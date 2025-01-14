@@ -30,11 +30,14 @@ const properties = defineProps<{
         to: number;
         total: number;
     };
+    roles: string[];
 }>();
 
 watch(searchValue, (newValue) => {
     router.get(route('assets'), { search: newValue }, { preserveState: true });
 });
+
+const isUser = ref(properties.roles.includes('user'));
 </script>
 
 <template>
@@ -55,8 +58,8 @@ watch(searchValue, (newValue) => {
                     <td>Id</td>
                     <td>Name</td>
                     <td>Price USD</td>
-                    <td>Buy</td>
-                    <td>Watch</td>
+                    <td v-if="isUser">Buy</td>
+                    <td v-if="isUser">Watch</td>
                 </tr>
                 <tr v-for="asset in assets.data" :key="asset.asset_id">
                     <td>
@@ -73,7 +76,7 @@ watch(searchValue, (newValue) => {
                     <td>{{ asset.name }}</td>
                     <td v-if="asset.price_usd">${{ asset.price_usd }}</td>
                     <td v-else>No price data</td>
-                    <td>
+                    <td v-if="isUser">
                         <Link
                             class="rounded bg-gray-100 p-2 hover:bg-black hover:text-white"
                             v-if="asset.price_usd != null"
@@ -87,7 +90,7 @@ watch(searchValue, (newValue) => {
                             Buy
                         </Link>
                     </td>
-                    <td>
+                    <td v-if="isUser">
                         <Link
                             class="rounded bg-gray-100 p-2 hover:bg-black hover:text-white"
                             v-if="asset.price_usd != null"
