@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssetController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\EntryController;
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\PriceObservationController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Entry;
@@ -11,12 +13,13 @@ use App\Models\PriceObservation;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortfolioController;
 
-Route::inertia('/register', 'Auth/Register');
 Route::inertia('/login', 'Auth/Login');
 Route::inertia('/confirm-password', 'Auth/ConfirmPassword');
 Route::inertia('/reset-password', 'Auth/ResetPassword');
 Route::inertia('/forgot-password', 'Auth/ForgotPassword');
 Route::inertia('/verify-email', 'Auth/VerifyEmail');
+
+Route::get('/register', [RegisteredUserController::class, 'show'])->name('register');
 
 Route::inertia('/', 'Welcome')->name('welcome');
 Route::get('/assets', [AssetController::class, 'index'])->name('assets');
@@ -27,6 +30,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/{user}/make-admin', [AdminController::class, 'makeAdmin'])->name('admin.make-admin');
     Route::patch('/admin/{user}/update', [AdminController::class, 'update'])->name('admin.update');
     Route::delete('admin/{user}/delete', [AdminController::class, 'destroy'])->name('admin.delete');
+
+    Route::get('/invite', [InvitationController::class, 'index'])->name('invite');
+    Route::post('/invite', [InvitationController::class, 'invite'])->name('invite.invite');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::put('/profile/add-balance', [ProfileController::class, 'updateBalance'])->name('profile.update-balance');

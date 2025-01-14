@@ -16,6 +16,13 @@ import { Link } from '@inertiajs/vue3';
                         v-if="$page.props.authentication.isAdmin"
                         prefetch
                         cache-for="10s"
+                        :href="route('invite')"
+                        >Send an invitation</Link
+                    >
+                    <Link
+                        v-if="$page.props.authentication.isAdmin"
+                        prefetch
+                        cache-for="10s"
                         :href="route('admin')"
                         >Admin</Link
                     >
@@ -48,7 +55,6 @@ import { Link } from '@inertiajs/vue3';
                     <Link prefetch cache-for="10s" :href="route('assets')"
                         >Assets</Link
                     >
-                    <Link :href="route('register')">Register</Link>
                     <Link :href="route('login')">Login</Link>
                 </div>
             </nav>

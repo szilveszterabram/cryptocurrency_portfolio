@@ -10,6 +10,7 @@ const form = useForm({
     email: '',
     password: '',
     password_confirmation: '',
+    invite_token: route().params.invite_token,
 });
 
 const submit = () => {
