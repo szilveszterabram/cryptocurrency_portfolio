@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Entry;
 use App\Models\Portfolio;
 use App\Models\PriceObservation;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortfolioController;
 
@@ -25,14 +26,14 @@ Route::inertia('/', 'Welcome')->name('welcome');
 Route::get('/assets', [AssetController::class, 'index'])->name('assets');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin');
-    Route::get('/admin/{user}', [AdminController::class, 'show'])->name('admin.show');
-    Route::post('/admin/{user}/make-admin', [AdminController::class, 'makeAdmin'])->name('admin.make-admin');
-    Route::patch('/admin/{user}/update', [AdminController::class, 'update'])->name('admin.update');
-    Route::delete('admin/{user}/delete', [AdminController::class, 'destroy'])->name('admin.delete');
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin')->middleware('permission:navigate to admin');
+    Route::get('/admin/{user}', [AdminController::class, 'show'])->name('admin.show')->middleware('permission:view a user at admin.show');
+    Route::post('/admin/{user}/make-admin', [AdminController::class, 'makeAdmin'])->name('admin.make-admin')->middleware('permission:make a user admin at admin.make-admin');
+    Route::patch('/admin/{user}/update', [AdminController::class, 'update'])->name('admin.update')->middleware('permission:update user info at admin.update');
+    Route::delete('admin/{user}/delete', [AdminController::class, 'destroy'])->name('admin.delete')->middleware('permission:delete a user at admin.delete');
 
-    Route::get('/invite', [InvitationController::class, 'index'])->name('invite');
-    Route::post('/invite', [InvitationController::class, 'invite'])->name('invite.invite');
+    Route::get('/invite', [InvitationController::class, 'index'])->name('invite')->middleware('permission:navigate to invite');
+    Route::post('/invite', [InvitationController::class, 'invite'])->name('invite.invite')->middleware('permission:send an invite at invite.invite');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::put('/profile/add-balance', [ProfileController::class, 'updateBalance'])->name('profile.update-balance');

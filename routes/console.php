@@ -18,6 +18,3 @@ Artisan::command('logs:clear', function() {
 
 Schedule::job(FetchAssetsJob::class)->everyThreeMinutes();
 Schedule::job(FetchAssetIconsJob::class)->everyThreeMinutes();
-
-// Clear logs
-Schedule::command('php artisan logs:clear')->everyTenMinutes();
