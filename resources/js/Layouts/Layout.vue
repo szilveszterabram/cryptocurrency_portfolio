@@ -68,8 +68,10 @@ import { Link } from '@inertiajs/vue3';
                 </div>
             </nav>
         </header>
-        <main class="mb-5 mt-14 min-h-screen w-full bg-gray-50">
-            <slot />
+        <main class="mt-8 min-h-screen w-full">
+            <div class="h-full w-full bg-gradient-to-b from-teal-800 to-black">
+                <slot />
+            </div>
         </main>
     </div>
 </template>
