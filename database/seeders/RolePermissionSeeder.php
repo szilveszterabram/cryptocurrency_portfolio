@@ -14,8 +14,8 @@ class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        $guestRole = Role::findByName(RoleEnum::GUEST->value);
-        $userRole = Role::findByName(RoleEnum::USER->value);
+        $guestRole = Role::findByName(RoleEnum::Guest->value);
+        $userRole = Role::findByName(RoleEnum::User->value);
 
         $permissions = Permission::all();
         $guestPermissions = Permission::whereIn('name', [

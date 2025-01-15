@@ -13,14 +13,23 @@ import { Link } from '@inertiajs/vue3';
                     class="flex w-full justify-evenly space-x-6 self-start text-xl"
                 >
                     <Link
-                        v-if="$page.props.authentication.isAdmin"
+                        :href="route('impersonate.stop')"
+                        v-if="
+                            ($page.props.impersonation as any).isImpersonating
+                        "
+                        as="button"
+                        method="post"
+                        >Stop impersonating</Link
+                    >
+                    <Link
+                        v-if="($page.props.authentication as any).isAdmin"
                         prefetch
                         cache-for="10s"
                         :href="route('invite')"
                         >Send an invitation</Link
                     >
                     <Link
-                        v-if="$page.props.authentication.isAdmin"
+                        v-if="($page.props.authentication as any).isAdmin"
                         prefetch
                         cache-for="10s"
                         :href="route('admin')"

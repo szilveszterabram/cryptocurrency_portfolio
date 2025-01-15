@@ -147,6 +147,22 @@ const editing = ref(false);
                     >
                         Make user admin
                     </button>
+                    <button
+                        class="rounded bg-gray-200 p-2 hover:bg-gray-100"
+                        v-if="
+                            user.id !==
+                            ($page.props.authentication as any).user.id
+                        "
+                        @click="
+                            router.post(
+                                route('impersonate.start', {
+                                    user: user.id,
+                                }),
+                            )
+                        "
+                    >
+                        Impersonate user
+                    </button>
                 </div>
 
                 <hr class="mt-4" />

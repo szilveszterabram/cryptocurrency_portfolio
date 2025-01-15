@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Invitation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class RegistrationService
 {

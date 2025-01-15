@@ -26,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
     require __DIR__.'/portfolio.php';
     require __DIR__.'/price_observation.php';
     require __DIR__.'/profile.php';
+    require __DIR__.'/impersonation.php';
 });
 
 require __DIR__.'/auth.php';

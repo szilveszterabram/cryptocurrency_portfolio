@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        $user->assignRole(RoleEnum::USER);
+        $user->assignRole(RoleEnum::User);
 
         $this->registrationService->useInvite($request);
 

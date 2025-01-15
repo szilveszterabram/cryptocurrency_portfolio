@@ -4,16 +4,16 @@ namespace App\Enums;
 
 enum RoleEnum: string
 {
-    case ADMIN = 'admin';
-    case USER = 'user';
-    case GUEST = 'guest';
+    case Admin = 'admin';
+    case User = 'user';
+    case Guest = 'guest';
 
     public function label(): string
     {
         return match ($this) {
-            RoleEnum::USER => 'User',
-            RoleEnum::ADMIN => 'Admin',
-            RoleEnum::GUEST => 'Guest',
+            RoleEnum::User => 'User',
+            RoleEnum::Admin => 'Admin',
+            RoleEnum::Guest => 'Guest',
         };
     }
 }

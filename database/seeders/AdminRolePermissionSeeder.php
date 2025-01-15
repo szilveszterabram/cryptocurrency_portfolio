@@ -11,7 +11,7 @@ class AdminRolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        $adminRole = Role::findByName(RoleEnum::ADMIN->value);
+        $adminRole = Role::findByName(RoleEnum::Admin->value);
         $permissions = Permission::all();
 
         $adminRole->givePermissionTo($permissions);
