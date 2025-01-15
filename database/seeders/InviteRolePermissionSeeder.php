@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\InvitationPermissionEnum;
 use App\Enums\RoleEnum;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -13,8 +14,8 @@ class InviteRolePermissionSeeder extends Seeder
     {
         $adminRole = Role::findByName(RoleEnum::ADMIN->value);
         $permissions = Permission::whereIn('name', [
-            'navigate to invite',
-            'send an invite at invite.invite'
+            InvitationPermissionEnum::NavigateToInvite->value,
+            InvitationPermissionEnum::SendInvite->value
         ]);
 
         $adminRole->givePermissionTo($permissions);

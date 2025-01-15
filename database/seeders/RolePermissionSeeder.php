@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enums\AssetPermissionEnum;
+use App\Enums\HomePermissionEnum;
+use App\Enums\ProfilePermissionEnum;
 use App\Enums\RoleEnum;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -16,9 +19,9 @@ class RolePermissionSeeder extends Seeder
 
         $permissions = Permission::all();
         $guestPermissions = Permission::whereIn('name', [
-            'navigate to welcome',
-            'navigate to profile',
-            'navigate to assets'
+            HomePermissionEnum::NavigateToWelcome->value,
+            ProfilePermissionEnum::NavigateToProfile->value,
+            AssetPermissionEnum::NavigateToAsset->value
         ])->get();
 
         $userRole->givePermissionTo($permissions);
