@@ -7,7 +7,6 @@ const model = defineModel({
 defineProps({
     name: {
         type: String,
-        required: true,
     },
     type: {
         type: String,
@@ -19,13 +18,17 @@ defineProps({
 </script>
 
 <template>
-    <div class="mb-6">
-        <label>{{ name }}</label>
+    <div class="mb-6 flex flex-col">
+        <strong>
+            <label>{{ name }}</label>
+        </strong>
+
         <input
             :type="type"
             v-model="model"
             :class="{ '!ring-red-500': errorMessage }"
             :placeholder="placeholder"
+            class="rounded"
         />
         <small class="text-red-500" v-message="errorMessage">{{
             errorMessage

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\PortfolioPermissionEnum;
 use App\Models\Portfolio;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -12,7 +13,7 @@ class PortfolioPolicy
 
     public function view(User $user, Portfolio $portfolio): bool
     {
-        if (!$user->can('navigate to portfolio.show')) {
+        if (!$user->can(PortfolioPermissionEnum::NavigateToShow->value)) {
             return false;
         }
 
@@ -21,16 +22,16 @@ class PortfolioPolicy
 
     public function create(User $user): bool
     {
-        return $user->can('navigate to portfolio.create') && $user->can('create portfolio at portfolio.store');
+        return $user->can(PortfolioPermissionEnum::NavigateToCreate->value) && $user->can(PortfolioPermissionEnum::CreatePortfolio->value);
     }
 
     public function update(User $user, Portfolio $portfolio): bool
     {
-        if (!$user->can('navigate to portfolio.edit')) {
+        if (!$user->can(PortfolioPermissionEnum::NavigateToEdit->value)) {
             return false;
         }
 
-        if (!$user->can('edit a portfolio at portfolio.update')) {
+        if (!$user->can(PortfolioPermissionEnum::UpdatePortfolio->value)) {
             return false;
         }
 
@@ -39,7 +40,7 @@ class PortfolioPolicy
 
     public function delete(User $user, Portfolio $portfolio): bool
     {
-        if (!$user->can('delete a portfolio at portfolio.destroy')) {
+        if (!$user->can(PortfolioPermissionEnum::DeletePortfolio->value)) {
             return false;
         }
 

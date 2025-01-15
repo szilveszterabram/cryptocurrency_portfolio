@@ -29,7 +29,6 @@ class CreateEntryRequest extends FormRequest
         return [
             function (Validator $validator) {
                 $user = auth()->user();
-                Log::debug($this->input());
                 if ($user->balance < $this->input('amount') * $this->input('price_at_buy')) {
                     $validator->errors()->add(
                         'amount',

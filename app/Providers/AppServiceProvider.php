@@ -9,6 +9,7 @@ use App\Observers\AssetObserver;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,5 +18,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Vite::prefetch(concurrency: 3);
+
+        Inertia::share([
+            'authentication' => function() {
+                $user = auth()->user();
+                return [
+                    'user' => $user?->only(['id', 'name', 'email']),
+                    'isAdmin' => $user ? $user->hasRole('admin') : false,
+                ];
+            }
+        ]);
     }
 }

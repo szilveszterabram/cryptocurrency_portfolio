@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\EntryPermissionEnum;
 use App\Models\Entry;
 use App\Models\Portfolio;
 use App\Models\User;
@@ -13,11 +14,11 @@ class EntryPolicy
 
     public function create(User $user): bool
     {
-        if (!$user->can('navigate to entry.create')) {
+        if (!$user->can(EntryPermissionEnum::NavigateToCreate->value)) {
             return false;
         }
 
-        if (!$user->can('buy assets at entry.store')) {
+        if (!$user->can(EntryPermissionEnum::CreateEntry->value)) {
             return false;
         }
 
@@ -27,7 +28,7 @@ class EntryPolicy
 
     public function delete(User $user, Entry $entry): bool
     {
-        if (!$user->can('delete assets at entry.destroy')) {
+        if (!$user->can(EntryPermissionEnum::DeleteEntry->value)) {
             return false;
         }
 

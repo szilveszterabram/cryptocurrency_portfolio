@@ -2,6 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Enums\AssetPermissionEnum;
+use App\Enums\EntryPermissionEnum;
+use App\Enums\HomePermissionEnum;
+use App\Enums\PortfolioPermissionEnum;
+use App\Enums\PriceObservationPermissionEnum;
+use App\Enums\ProfilePermissionEnum;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 
@@ -14,27 +20,27 @@ class PermissionSeeder extends Seeder
 
         // Guest
         $guest = [
-            'navigate to welcome',
-            'navigate to profile',
-            'navigate to assets'
+            HomePermissionEnum::NavigateToWelcome->value,
+            ProfilePermissionEnum::NavigateToProfile->value,
+            AssetPermissionEnum::NavigateToAsset->value
         ];
 
         // User
         $user = [
-            'add to balance at profile.update-balance',
-            'navigate to portfolio.create',
-            'create portfolio at portfolio.store',
-            'navigate to portfolio.show',
-            'navigate to portfolio.edit',
-            'edit a portfolio at portfolio.update',
-            'delete a portfolio at portfolio.destroy',
-            'navigate to entry.create',
-            'buy assets at entry.store',
-            'delete assets at entry.destroy',
-            'navigate to observation',
-            'navigate to observation.create',
-            'create observations at observation.store',
-            'delete observations at observation.destroy'
+            ProfilePermissionEnum::NavigateToProfile->value,
+            PortfolioPermissionEnum::NavigateToCreate->value,
+            PortfolioPermissionEnum::CreatePortfolio->value,
+            PortfolioPermissionEnum::NavigateToShow->value,
+            PortfolioPermissionEnum::NavigateToEdit->value,
+            PortfolioPermissionEnum::UpdatePortfolio->value,
+            PortfolioPermissionEnum::DeletePortfolio->value,
+            EntryPermissionEnum::NavigateToCreate->value,
+            EntryPermissionEnum::CreateEntry->value,
+            EntryPermissionEnum::DeleteEntry->value,
+            PriceObservationPermissionEnum::NavigateToObservation->value,
+            PriceObservationPermissionEnum::NavigateToCreate->value,
+            PriceObservationPermissionEnum::CreateObservation->value,
+            PriceObservationPermissionEnum::DeleteObservation->value
         ];
 
         foreach ([...$guest, ...$user] as $permission) {

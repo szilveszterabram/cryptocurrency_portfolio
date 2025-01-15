@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\RegistrationService;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +18,14 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
-    public function create(): Response
+    public function __construct(protected RegistrationService $registrationService) {}
+
+
+    public function show(Request $request): RedirectResponse|Response
     {
-        return Inertia::render('Auth/Register');
+        return $this->registrationService->validateToken($request) ?
+            Inertia::render('Auth/Register') :
+            redirect()->route('login')->withErrors(['No eligible registration token was found. Redirected to login screen.']);
     }
 
     /**
@@ -35,6 +39,7 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'invite_token' => 'required|string',
         ]);
 
         $user = User::create([
@@ -48,6 +53,8 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         $user->assignRole(RoleEnum::USER);
+
+        $this->registrationService->useInvite($request);
 
         return redirect(route('welcome', absolute: false));
     }

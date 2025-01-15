@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\PriceObservationPermissionEnum;
 use App\Models\PriceObservation;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -11,16 +12,16 @@ class PriceObservationPolicy
     use HandlesAuthorization;
     public function view(User $user): bool
     {
-        return $user->can('navigate to observation');
+        return $user->can(PriceObservationPermissionEnum::NavigateToObservation->value);
     }
 
     public function create(User $user): bool
     {
-        if (!$user->can('navigate to observation.create')) {
+        if (!$user->can(PriceObservationPermissionEnum::NavigateToCreate->value)) {
             return false;
         }
 
-        if (!$user->can('create observations at observation.store')) {
+        if (!$user->can(PriceObservationPermissionEnum::CreateObservation->value)) {
             return false;
         }
 
@@ -29,7 +30,7 @@ class PriceObservationPolicy
 
     public function delete(User $user, PriceObservation $priceObservation): bool
     {
-        if (!$user->can('delete observations at observation.destroy')) {
+        if (!$user->can(PriceObservationPermissionEnum::DeleteObservation->value)) {
             return false;
         }
 

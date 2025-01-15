@@ -12,6 +12,20 @@ import { Link } from '@inertiajs/vue3';
                     v-if="$page.props.auth.user"
                     class="flex w-full justify-evenly space-x-6 self-start text-xl"
                 >
+                    <Link
+                        v-if="$page.props.authentication.isAdmin"
+                        prefetch
+                        cache-for="10s"
+                        :href="route('invite')"
+                        >Send an invitation</Link
+                    >
+                    <Link
+                        v-if="$page.props.authentication.isAdmin"
+                        prefetch
+                        cache-for="10s"
+                        :href="route('admin')"
+                        >Admin</Link
+                    >
                     <Link prefetch cache-for="10s" :href="route('welcome')"
                         >Home</Link
                     >
@@ -35,7 +49,12 @@ import { Link } from '@inertiajs/vue3';
                     v-else
                     class="flex w-full justify-evenly space-x-6 self-start text-xl"
                 >
-                    <Link :href="route('register')">Register</Link>
+                    <Link prefetch cache-for="10s" :href="route('welcome')"
+                        >Home</Link
+                    >
+                    <Link prefetch cache-for="10s" :href="route('assets')"
+                        >Assets</Link
+                    >
                     <Link :href="route('login')">Login</Link>
                 </div>
             </nav>
