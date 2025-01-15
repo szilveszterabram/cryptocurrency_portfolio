@@ -10,7 +10,6 @@ class RegistrationService
 {
     public function validateToken(Request $request): bool
     {
-        $invite = null;
         if ($request->has('invite_token')) {
             $invite = Invitation::where('token', $request->get('invite_token'))->first();
             if ($invite && $invite->is_used === false) {
@@ -23,7 +22,6 @@ class RegistrationService
     public function useInvite(Request $request): void
     {
         $invite = Invitation::where('token', $request->get('invite_token'))->first();
-        Log::info($invite);
         $invite?->update(['is_used' => true]);
     }
 }
