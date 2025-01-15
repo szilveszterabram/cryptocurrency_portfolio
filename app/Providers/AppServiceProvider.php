@@ -31,13 +31,8 @@ class AppServiceProvider extends ServiceProvider
                 $originalUserId = session()->has('before_impersonation') ?
                     session()->get('before_impersonation') : null;
                 $isImpersonating = (bool)$originalUserId;
-                $impersonatedUser = $isImpersonating ? auth()->user() : null;
                 return [
                     'isImpersonating' => $isImpersonating,
-                    'user' => $isImpersonating ? [
-                        'id' => $impersonatedUser->id,
-                        'name' => $impersonatedUser->name,
-                    ] : null,
                 ];
             }
         ]);
